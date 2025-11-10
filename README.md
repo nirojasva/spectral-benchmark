@@ -66,11 +66,11 @@ python3 scripts/model/model_OnlineBootKNN.py
 ```
 ## Example of Real-Time Anomaly Detection
 
-[Link to Real-Time Anomaly Explanation (PDF)](notebooks/img_anomalies/A1_transf_ZNORM_anomaly_explanation.pdf)
+[Link to Real-Time Anomaly Explanation (PDF)](notebooks/img_anomalies/A6_transf_ZNORM_anomaly_explanation.pdf)
 
 ## Example of Detected Anomaly
 
-[Link to Detected Anomaly Visualization (PDF)](notebooks/img_monitoring_score/A1_transf_ZNORM_z_scores_and_p.pdf)
+[Link to Detected Anomaly Visualization (PDF)](notebooks/img_monitoring_score/A6_transf_ZNORM_z_scores_and_p.pdf)
 
 
 ## How to Generate Comparative Anomaly Score of SOTA Methods? 
