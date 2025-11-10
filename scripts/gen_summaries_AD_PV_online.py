@@ -19,10 +19,12 @@ DATA_PATH_N = current_dir / 'datasets' / 'processed'
 
 SUMMARY_PATH = current_dir / 'datasets' / 'summaries'
 
-SUMMARY_FILE = SUMMARY_PATH / 'summary_results_online_detectors_pv_ds.xlsx'
+# Define name of the file to generate
+#SUMMARY_FILE = SUMMARY_PATH / 'summary_results_online_detectors_pv_ds.xlsx'
+#SUMMARY_FILE = SUMMARY_PATH / 'summary_results_ablation_study_pv_ds.xlsx'
+SUMMARY_FILE = SUMMARY_PATH / 'summary_results_test.xlsx'
 
-# Dataset folders to process
-
+# Dataset folders to process (Comparative of SOTA Methods)
 dataset_paths = [
     DATA_PATH_N / 'processed_server22_A1',
     DATA_PATH_N / 'processed_server22_A2',
@@ -35,6 +37,7 @@ dataset_paths = [
     DATA_PATH_N / 'processed_server18_A9',
 ]
 
+# Dataset folders to process (Comparative of Ablation Methods - SWKNN and OBKNN)
 dataset_paths = [
     DATA_PATH_N / 'processed_server22_A1',
     DATA_PATH_N / 'processed_server22_A2',

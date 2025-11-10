@@ -9,3 +9,10 @@ datasets/raw/ScenariosV2/
 /ablation_results.txt
 
 ablation_results.txt
+scripts/__pycache__
+scripts/*.pyc
+model/__pycache__
+model/*.pyc
+__pycache__/
+*.pyc
+*.key

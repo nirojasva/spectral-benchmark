@@ -41,9 +41,7 @@ LIST_WINDOW_SIZE = [60, 120, 240]
 COLS_POS_SMIN = 1
 COLS_POS_SMAX = 2049
 
-# Example grid for a model
-
-"""
+#PARAM GRID FOR ABLATION STUDY OBKNN ans SWKNN
 PARAM_GRID = {
 
     "SWKNN": {
@@ -87,22 +85,7 @@ PARAM_GRID = {
         "transf": ["SQRT"],        # Default: "NONE"
     },
 }
-"""
 
-PARAM_GRID = {
-
-    "SWKNN": {
-        'k': [1, 10, 50],                        # Default: 'unknown'
-        'k_is_max': [False],                     # Default: False
-        'metric': ['cityblock'],                 # Default: 'unknown'
-        #'metric_params': [{'p':2}],             # Default: 'unknown'
-        #'float_type': [np.float64],             # Default: 'unknown'
-        'min_node_size': [5],                    # Default: 5
-        'max_node_size': [20],                   # Default: 20
-        'split_sampling': [5],                   # Default: 5
-    },
-
-}
 
 def get_model_with_params(model_name, param_grid, window_size, schema):
     if model_name == "SWKNN":
@@ -126,7 +109,7 @@ def get_model_with_params(model_name, param_grid, window_size, schema):
         raise ValueError(f"Unknown model: {model_name}")
 
 for file_name in spectra_files:
-     
+    """ 
     if any(substring in file_name.name for substring in ["A1_","A2_","A3_","A7_","A8_","A9_"]):
 
         print("File to Use: ",file_name)
@@ -134,11 +117,14 @@ for file_name in spectra_files:
     else:
         print("Filed not to Use", file_name)
         continue
-    
+    """
 
     # Load spectra and labels data
     full_path_spectra = os.path.join(DATA_PATH, file_name)
     result = pd.read_csv(full_path_spectra, sep=',', low_memory=False, dtype={'CURRENTTIMESTAMP': str})
+    cols = result.columns[COLS_POS_SMIN:COLS_POS_SMAX]
+    
+    """
     # Check for duplicates in the merged DataFrame
     duplicates = result[result.duplicated(subset=['CURRENTTIMESTAMP'])]['CURRENTTIMESTAMP']
 
@@ -149,7 +135,7 @@ for file_name in spectra_files:
     print(f"Number of duplicate rows: {duplicate_count}")
     print(duplicates.head())  # Show the first few duplicate rows
 
-    cols = result.columns[COLS_POS_SMIN:COLS_POS_SMAX]
+
     print("Name DS: ", file_name)
 
     if len(result)==4200:
@@ -157,7 +143,8 @@ for file_name in spectra_files:
     else:
         print("Incorrect Length of...", len(result))
         break
-  
+    """
+
     stream = NumpyStream(result[cols].values, result["ANOMALY?"].values, dataset_name="PV", feature_names=cols)
 
     for window_size in LIST_WINDOW_SIZE:    

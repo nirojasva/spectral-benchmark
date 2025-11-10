@@ -1,16 +1,32 @@
-# Online Bootstrapping K-Nearest Neighbor (OnlineBootKNN) - Anomaly Detection on Spectral Datastreams
+# Benckmark for Anomaly Detection on Spectral Datastreams with Online Bootstrapping K-Nearest Neighbor (OBKNN)
 
 This is the implementation of OnlineBootKNN published in ... [[paper](...)]
 
-### Prerequisites
+## Installation
 
-- Python 3.11.2
-- Microsoft Visual C++ 14.0 or higher (PySAD Requirement)
-- Java (CapyMOA Requirement)
+- Step 1: System-Wide Prerequisites
+Before installing the Python packages, please ensure you have the following system-level tools installed:
 
-## Required Packages
+    - Python 3.11.2
 
-To ensure the OnlineBootKNN algorithm and all the project runs correctly, please install the following Python packages. It is highly recommended to use a virtual environment to manage these dependencies.
+    - C++ Build Tools: Required to compile dependencies in dSalmon.
+
+        - On Ubuntu: sudo apt-get install build-essential
+
+        - On Windows: Install "C++ build tools".
+
+    - Java (JDK): Required to run the capymoa package.
+
+- Step 2: Evaluation Environment (env_spectra)
+This environment is for running the runned experiments.
+
+```bash
+# Create the environment
+python3 -m venv env_spectra
+
+# Activate the environment
+source env_spectra/bin/activate
+```
 
 You can install all the necessary packages using pip:
 
@@ -27,7 +43,8 @@ pip install -r requirements.txt
 - The first colum in each dataset file correspond to the timestamp of the recorded spectral instances.
 - The rest of columns in each dataset are associated with different wavelenths of the spectral instances.
 
-## How to run OnlineBootKNN
+## How to run OnlineBootKNN?
+
 ### Parameters
 
 - chunk_size: size of the chunks (default: 240)
@@ -38,9 +55,10 @@ pip install -r requirements.txt
 
 ### Script
 ```
+cd ~/spectral-anomaly-benchmark-optical-emission
+source env_spectra/bin/activate
 python3 scripts/model/model_OnlineBootKNN.py
 ```
-
 ## Example of Real-Time Anomaly Detection
 
 [Link to Real-Time Anomaly Explanation (PDF)](notebooks/img_anomalies/A1_transf_ZNORM_anomaly_explanation.pdf)
@@ -48,6 +66,15 @@ python3 scripts/model/model_OnlineBootKNN.py
 ## Example of Detected Anomaly
 
 [Link to Detected Anomaly Visualization (PDF)](notebooks/img_monitoring_score/A1_transf_ZNORM_z_scores_and_p.pdf)
+
+
+## How to Generate Comparative Anomaly Score of SOTA Methods? 
+### Script
+```
+cd ~/spectral-anomaly-benchmark-optical-emission
+source env_spectra/bin/activate
+python3 scripts/gen_comparative_AD_PV_online.py
+```
 
 ## Summary of Results
 

@@ -42,70 +42,18 @@ LIST_WINDOW_SIZE = [60, 120, 240]
 COLS_POS_SMIN = 1
 COLS_POS_SMAX = 2049
 
-# Example grid for a model
+#PARAM GRID FOR DEFAULT HYPERPARAMETER OF EACH METHOD
 PARAM_GRID = {
     "xStream": {
-        'num_components': [100, 200],    # Default: 100
-        'n_chains': [100, 200],           # Default: 100
-        'depth': [25, 50],              # Default: 25
+        'num_components': [100],     # Default: 100
+        'n_chains': [100],           # Default: 100
+        'depth': [25],               # Default: 25
     },
     "RSHash": {
-        'decay': [0.015, 0.1],            # Default: 0.015
-        'num_components': [100, 150],     # Default: 100
-        'num_hash_fns': [1, 2],            # Default: 1
-        'feature_mins': [[0], [0.5]],      # Default: [0]
-        'feature_maxes': [[1],[10000]],     # Default: [10000]
-    },
-    "IForestASD": {
-        'initial_window_X': [None],   # Default: None
-    },
-    "KitNet": {
-        'max_size_ae': [10, 20],        # Default: 10
-        'learning_rate': [0.1, 0.01],     # Default: 0.1
-        'hidden_ratio': [0.75, 0.85],     # Default: 0.75
-    },
-    "ExactStorm": {
-        'max_radius': [0.1, 5000],        # Default: 0.1
-    },
-    "oIF": {
-        'num_trees': [32, 40],          # Default: 32
-        'max_leaf_samples': [32, 20],   # Default: 32
-        'growth_criterion': ['adaptive','fixed' ], # Default: 'adaptive'
-        'n_jobs': [-1],             # Default: -1 (use all processors)
-    },
-    "HStree": {
-        'number_of_trees': [25, 32],    # Default: 25
-        'anomaly_threshold': [0.5, 0.1], # Default: 0.5
-        'size_limit': [0.1, 0.2],        # Default: 0.1
-        'max_depth': [15, 20],          # Default: 15
-    },
-    "RobustRandomCutForest": {
-        #'shingle_size': [4 , 20],        # Default: 4
-        'tree_size': [256 , 20],           # Default: 256 
-        'num_trees': [4 , 32],           # Default: 4
-    },
-    "OnlineBootKNN": {
-        'chunk_size': [1, 10, 50, 240],         # Default: 10
-        'ensemble_size': [1, 10, 50, 240],      # Default: 10
-        'alpha': [0.05, 0.01],            # Default: 0.05
-        'dmetric':['cityblock', 'minkowski'],    # Default: cityblock
-        'algorithm':['brute'],      # Default: brute
-        'n_jobs': [-1],             # Default: -1 (use all processors)
-        "transf": ["ZNORM"],        # Default: "NONE"
-    },
-}
-"""
-PARAM_GRID = {
-    "xStream": {
-        'num_components': [1],    # Default: 100
-        'n_chains': [1],           # Default: 100
-        'depth': [2],              # Default: 25
-    },
-    "RSHash": {
-        'decay': [0.015],            # Default: 0.015
-        'num_components': [1],     # Default: 100
+        'decay': [0.015],               # Default: 0.015
+        'num_components': [100],        # Default: 100
         'num_hash_fns': [1],            # Default: 1
-        'feature_mins': [[0]],      # Default: [0]
+        'feature_mins': [[0]],          # Default: [0]
         'feature_maxes': [[10000]],     # Default: [10000]
     },
     "IForestASD": {
@@ -120,25 +68,25 @@ PARAM_GRID = {
         'max_radius': [0.1],        # Default: 0.1
     },
     "oIF": {
-        'num_trees': [1],          # Default: 32
-        'max_leaf_samples': [1],   # Default: 32
+        'num_trees': [32],                 # Default: 32
+        'max_leaf_samples': [32],          # Default: 32
         'growth_criterion': ['adaptive' ], # Default: 'adaptive'
-        'n_jobs': [-1],             # Default: -1 (use all processors)
+        'n_jobs': [-1],                    # Default: -1 (use all processors)
     },
     "HStree": {
-        'number_of_trees': [1],    # Default: 25
+        'number_of_trees': [25],    # Default: 25
         'anomaly_threshold': [0.5], # Default: 0.5
         'size_limit': [0.1],        # Default: 0.1
-        'max_depth': [1],          # Default: 15
+        'max_depth': [15],          # Default: 15
     },
     "RobustRandomCutForest": {
-        #'shingle_size': [4 , 20],        # Default: 4
-        'tree_size': [1 ],           # Default: 256 
-        'num_trees': [1 ],           # Default: 4
+        #'shingle_size': [4 , 20],  # Default: 4
+        'tree_size': [256],         # Default: 256 
+        'num_trees': [4],           # Default: 4
     },
     "OnlineBootKNN": {
-        'chunk_size': [ 1],         # Default: 10
-        'ensemble_size': [ 1],      # Default: 10
+        'chunk_size': [240],        # Default: 10
+        'ensemble_size': [ 240],    # Default: 10
         'alpha': [0.05],            # Default: 0.05
         'dmetric':['cityblock'],    # Default: cityblock
         'algorithm':['brute'],      # Default: brute
@@ -146,7 +94,7 @@ PARAM_GRID = {
         "transf": ["ZNORM"],        # Default: "NONE"
     },
 }
-"""
+
 def get_model_with_params(model_name, param_grid, window_size, schema):
     if model_name == "xStream":
         return xStream(window_size=window_size, **param_grid)
@@ -170,7 +118,7 @@ def get_model_with_params(model_name, param_grid, window_size, schema):
         raise ValueError(f"Unknown model: {model_name}")
 
 for file_name in spectra_files:
-    
+    """
     if any(substring in file_name.name for substring in ["A1_"]):
 
         print("File to Use: ",file_name)
@@ -178,10 +126,14 @@ for file_name in spectra_files:
     else:
         print("Filed not to Use", file_name)
         continue
-           
+    """ 
+    
     # Load spectra and labels data
     full_path_spectra = os.path.join(DATA_PATH, file_name)
     result = pd.read_csv(full_path_spectra, sep=',', low_memory=False, dtype={'CURRENTTIMESTAMP': str})
+    cols = result.columns[COLS_POS_SMIN:COLS_POS_SMAX]
+
+    """
     # Check for duplicates in the merged DataFrame
     duplicates = result[result.duplicated(subset=['CURRENTTIMESTAMP'])]['CURRENTTIMESTAMP']
 
@@ -192,7 +144,7 @@ for file_name in spectra_files:
     print(f"Number of duplicate rows: {duplicate_count}")
     print(duplicates.head())  # Show the first few duplicate rows
 
-    cols = result.columns[COLS_POS_SMIN:COLS_POS_SMAX]
+    
     print("Name DS: ", file_name)
 
     if len(result)==4200:
@@ -200,7 +152,8 @@ for file_name in spectra_files:
     else:
         print("Incorrect Length of...", len(result))
         break
-  
+    """
+
     stream = NumpyStream(result[cols].values, result["ANOMALY?"].values, dataset_name="PV", feature_names=cols)
 
     for window_size in LIST_WINDOW_SIZE:    
