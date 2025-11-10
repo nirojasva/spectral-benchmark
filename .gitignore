@@ -1,0 +1,11 @@
+env_spectra/
+datasets/processed/
+datasets/processed_ablation/
+datasets/processed_ablation_lite/
+datasets/raw/ScenariosV3/
+datasets/raw/ScenariosV4/
+datasets/raw/ScenariosV2/
+/console_log_online_ad_pv_ds.txt
+/ablation_results.txt
+
+ablation_results.txt
