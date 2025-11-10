@@ -1,5 +1,6 @@
 env_spectra/
 datasets/processed/
+datasets/raw/
 datasets/processed_ablation/
 datasets/processed_ablation_lite/
 datasets/raw/ScenariosV3/
