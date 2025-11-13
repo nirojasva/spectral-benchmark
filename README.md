@@ -1,6 +1,6 @@
 # Benckmark for Anomaly Detection on Spectral Datastreams
 
-This is the implementation of the comparative benchmark of multivariate online anomaly detection methods including Online Bootstrapping K-Nearest Neighbor (OBKNN) published in [[paper](https://hal.science/hal-05115467)] with appendix [[app.](appendix.pdf)]
+This is the implementation of the comparative benchmark of multivariate online anomaly detection methods including Online Bootstrapping K-Nearest Neighbor (OBKNN) published in [[paper](https://hal.science/hal-05115467)] with appendix [[app.](appendix.pdf)].
 
 
 ## Installation
@@ -19,6 +19,7 @@ Before installing the Python packages, please ensure you have the following syst
     - Java (JDK): Required to run the capymoa package.
 
 - Step 2: Evaluation Environment (env_spectra)
+
 This environment is for running the different experiments.
 
 ```bash
