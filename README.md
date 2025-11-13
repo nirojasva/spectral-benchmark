@@ -1,6 +1,6 @@
 # Benckmark for Anomaly Detection on Spectral Datastreams
 
-This is the implementation of the comparative benchmark of multivariate online anomaly dection methods with Online Bootstrapping K-Nearest Neighbor (OBKNN) published in ... [[paper](...)] with appendix [app.](appendix.pdf)
+This is the implementation of the comparative benchmark of multivariate online anomaly dection methods including Online Bootstrapping K-Nearest Neighbor (OBKNN) published in ... [[paper](...)] with appendix [app.](appendix.pdf)
 
 
 ## Installation
@@ -19,7 +19,7 @@ Before installing the Python packages, please ensure you have the following syst
     - Java (JDK): Required to run the capymoa package.
 
 - Step 2: Evaluation Environment (env_spectra)
-This environment is for running the runned experiments.
+This environment is for running the different experiments.
 
 ```bash
 # Create the environment
@@ -42,14 +42,12 @@ pip install -r requirements.txt
 [Project folder for Raw Datasets](datasets/raw)
 
 
-
-
-## Datasets description 
+### Datasets description 
 - The last column in each dataset file refers to the anomaly label (1: anomaly, 0:normal).
 - The first colum in each dataset file correspond to the timestamp of the recorded spectral instances.
 - The rest of columns in each dataset are associated with different wavelenths of the spectral instances.
 
-## How to run OnlineBootKNN?
+## How to run OnlineBootKNN
 
 ### Parameters
 
@@ -61,20 +59,21 @@ pip install -r requirements.txt
 
 ### Script
 ```
-cd ~/spectral-anomaly-benchmark-optical-emission
+cd ~/spectral-benchmark
 source env_spectra/bin/activate
 python3 scripts/model/model_OnlineBootKNN.py
 ```
 
-## Example of Detected Anomaly
+### Example of Detected Anomaly
 
 [Link to Detected Anomaly Visualization (PDF)](notebooks/img_anomalies/A6_transf_ZNORM_anomaly_explanation.pdf)
 
 
-## How to Generate Comparative Anomaly Score of SOTA Methods? 
+## How to Generate Comparative Anomaly Score of SOTA Methods
+
 ### Script
 ```
-cd ~/spectral-anomaly-benchmark-optical-emission
+cd ~/spectral-benchmark
 source env_spectra/bin/activate
 python3 scripts/gen_comparative_AD_PV_online.py
 ```

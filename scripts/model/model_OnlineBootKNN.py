@@ -500,8 +500,8 @@ if __name__ == "__main__":
     WINDOW_SIZE = 120
     MODEL = "OnlineBootKNN"
     TRANF = "ZNORM"
-    CHUNCK_SIZE = 10
-    ENSEMBLE_SIZE = 10
+    CHUNCK_SIZE = 240
+    ENSEMBLE_SIZE = 240
     NO_BOOTSTRAPP = False
     NO_ZSCORE = False
     DMETRIC = "cityblock"
