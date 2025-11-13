@@ -496,7 +496,7 @@ if __name__ == "__main__":
     # Results dataframe
     summary_data = []
 
-    NUMBER_RUNS = 1
+    NUMBER_RUNS = 3
     WINDOW_SIZE = 120
     MODEL = "OnlineBootKNN"
     TRANF = "ZNORM"
