@@ -1,6 +1,6 @@
 # Benckmark for Anomaly Detection on Spectral Datastreams
 
-This is the implementation of the comparative benchmark of multivariate online anomaly dection methods including Online Bootstrapping K-Nearest Neighbor (OBKNN) published in ... [[paper](...)] with appendix [app.](appendix.pdf)
+This is the implementation of the comparative benchmark of multivariate online anomaly detection methods including Online Bootstrapping K-Nearest Neighbor (OBKNN) published in ... [[paper](...)] with appendix [app.](appendix.pdf)
 
 
 ## Installation
@@ -72,6 +72,7 @@ python3 scripts/model/model_OnlineBootKNN.py
 ## How to Generate Comparative Anomaly Score of SOTA Methods
 
 ### Script
+
 ```
 cd ~/spectral-benchmark
 source env_spectra/bin/activate
