@@ -291,95 +291,67 @@ class OnlineBootKNN(AnomalyDetector):
     def explain(self, headers, region_study_list, path: str, file_name: str):
         """
         Explain method to visualize anomalies in time series data.
+        Optimized for publication (Grayscale compatible, 10pt fonts).
         """
+        
+        plt.rcParams.update({
+            'font.size': 10,
+            'axes.labelsize': 10,
+            'xtick.labelsize': 8,
+            'ytick.labelsize': 8,
+            'legend.fontsize': 8,
+            'figure.titlesize': 12
+        })
+
         print("Is Anomaly?:", self.last_value_is_anomaly)
         print("Anomalies:", self.n_anomalies)
 
-        headers = headers.astype(float)  # Ensure headers are floats for plotting
-        region_study_list = np.array(region_study_list).astype(str)  # Ensure region study list is floats for plotting
+        headers = headers.astype(float)
+        region_study_list = np.array(region_study_list).astype(str)
 
         if not self.last_value_is_anomaly:
-            return  # Exit if no anomaly detected
-
-        print("Explain method...")
-
-        print("Abnormal Reference:", self.abnormal_reference)
-        print("Normal Reference:", self.normal_reference)
+            return
 
         if self.normal_reference is None or self.abnormal_reference is None:
-            raise ValueError("Error: Normal reference or input data is None.")
-
-        if len(self.normal_reference) != len(self.abnormal_reference):
-            raise ValueError("Error: Normal reference and input data must have the same length.")
+            raise ValueError("Error: References are None.")
 
         # Compute differences
         differences = featurewise_distance(self.abnormal_reference, self.normal_reference, metric=self.dmetric)
 
-        print("Differences:", differences)
+        # Create figure
+        fig, ax1 = plt.subplots(figsize=(10, 5)) 
 
-        # Create figure and axis objects
-        fig, ax1 = plt.subplots(figsize=(14, 7))  # Increase figure size for better readability
-        
-        # **Plot Differences (as bars)**
-        ax1.bar(headers, differences, label=f"Feature Differences (Z: {round(self.z, 2)})", color='orange', alpha=1.0)
+        ax1.bar(headers, differences, label=f"Difference (Z: {round(self.z, 2)})", 
+                color='orange', alpha=0.6, width=(headers[1]-headers[0]))
 
-        ax1.set_ylabel('Feature Differences', fontsize=14)
-        ax1.set_xlabel('Wavelengths (nm)', fontsize=14)
-
-        # **Ensure both axes have 0 aligned**
-        min_diff = differences.min()
-        max_diff = differences.max()
-
+        ax1.set_xlabel('Wavelengths (nm)')
+        ax1.set_ylabel('Intensity Difference')
         
-        lower_limit = min_diff * 1.05
-        upper_limit = max_diff * 1.05
         
-        ax1.set_ylim(lower_limit, upper_limit)
+        y_min, y_max = ax1.get_ylim()
         
-        # Twin Axis for Normal/Abnormal References
-        #ax2 = ax1.twinx()
-        
-        # **Plot normal reference (solid line)**
-        #ax2.plot(headers, self.normal_reference, label=f"Normal Instance (# Processed: {self.n})", color='blue', linewidth=2, alpha=0.9)
-
-        # **Plot abnormal reference (dashed line)**
-        #ax2.plot(headers, self.abnormal_reference, label=f"Abnormal Instance (# Anomalies: {self.n_anomalies})", color='red', linewidth=1.5, linestyle="dashed", alpha=0.9)
-        
-        # Labels and Grid
-        #ax2.set_xlabel('Wavelength', fontsize=12)
-        #ax2.set_ylabel('Intensity', fontsize=12)
-        ax1.grid(True, which='both', axis='y', linestyle='--', alpha=0.5)
-
-        
-        # **Ensure both graphs share the same zero reference**
-        #ax2.set_ylim(lower_limit, upper_limit)
-
-        for i, rs in enumerate(region_study_list):    
+        for i, rs in enumerate(region_study_list):     
             rs_s = float(rs.split(":")[0])
             rs_f = float(rs.split(":")[1])
             comp = str(rs.split(":")[2])
-            # Add vertical dotted grey line at max difference
-            ax1.axvline(x=rs_s, color='grey', linestyle='dotted', linewidth=1.5, alpha=0.8)
-            ax1.axvline(x=rs_f, color='grey', linestyle='dotted', linewidth=1.5, alpha=0.8)
-
-            # Label the x-axis value
-            ax1.text(rs_f, upper_limit*0.85*(len(region_study_list)-i)/len(region_study_list), f' RS{i+1} ({comp}) at: {rs_s}', fontsize=10)         
             
-            # **Avoid Overlapping Legends**
-            ax1.legend(loc="upper left", fontsize=10)
-            ax1.legend(loc="upper right", fontsize=10)
+            ax1.axvline(x=rs_s, color='black', linestyle=':', linewidth=1, alpha=0.6)
+            ax1.axvline(x=rs_f, color='black', linestyle=':', linewidth=1, alpha=0.6)
 
+            text_pos_y = y_max * (0.9 - (i * 0.05)) 
+            ax1.text(rs_s, text_pos_y, f' {comp}', fontsize=8, verticalalignment='top')
 
-        # **Add Title**
-        plt.title(f"Feature Differences (Abnormal vs. Normal Instances). \n # Total Anomalies: {self.n_anomalies} - # Total Instances: {self.count_reset*self.reset_threshold + self.n + self.window_size}", fontsize=14)
+        ax1.legend(loc='upper right', frameon=True)
 
+        plt.title(f"Anomaly Explanation (Total Anomalies: {self.n_anomalies})")
         
-        plot_path = os.path.join(path, f"{file_name}_anomaly_explanation.pdf")
-        plt.savefig(plot_path, format="pdf", bbox_inches='tight')
-        print(f"Plot saved at {plot_path}")
+        plt.tight_layout()
         
-        plt.close()
-    
+        if path and file_name:
+            plt.savefig(f"{path}/{file_name}.pdf", format='pdf', bbox_inches='tight')
+        
+        plt.show()
+
     def monitor_core_statistics(self):
         # Print monitored stats
         print("Mean:", self.mean)
@@ -473,6 +445,15 @@ if __name__ == "__main__":
     from capymoa.evaluation import AnomalyDetectionEvaluator
     from data_utils import calculate_roc_pr_auc
     import time
+    params = {
+    'font.size': 10,           
+    'axes.labelsize': 10,      
+    'xtick.labelsize': 8,      
+    'ytick.labelsize': 8,      
+    'legend.fontsize': 8,      
+    'figure.titlesize': 12
+    }
+    plt.rcParams.update(params)
     
     # Get the path to the current script
     current_dir = Path(__file__).resolve().parent
@@ -496,7 +477,7 @@ if __name__ == "__main__":
     # Results dataframe
     summary_data = []
 
-    NUMBER_RUNS = 3
+    NUMBER_RUNS = 1
     WINDOW_SIZE = 120
     MODEL = "OnlineBootKNN"
     TRANF = "ZNORM"
@@ -510,7 +491,7 @@ if __name__ == "__main__":
     SLEEP_TIME = 0
     #DATASETS_LIST = ["A1_","A2_","A3_","A4_","A5_","A6_","A7_","A8_","A9_"]
     
-    DATASETS_LIST = ["A1_", "A6_"]
+    DATASETS_LIST = ["A6_"]
     #DATASETS_LIST = ["DA1_", "SA1_", "TA1_","DA2_", "SA2_", "TA2_","DA3_", "SA3_", "TA3_"]
     MIN_Z_SCORE = 4
     REGION_STUDY = ["386.45:393.38:N2", "773.38:780.40:O2","652.47:659.53:H","304.46:311.54:OH","748.38:752.19:Ar"] 
@@ -566,12 +547,12 @@ if __name__ == "__main__":
                 print(f'AUC ({row}):', auc)
                 
                 plot_file_name = str(file_name.name.split("_")[0])+"_transf_"+TRANF
-                '''
+                
                 if learner.z > MIN_Z_SCORE:
                     learner.explain(cols, REGION_STUDY, PATH_PLOT_FILE_NAME_INTERPRETATION, plot_file_name)
-                learner.monitor_core_statistics()
-                learner.plot_core_statistics(PATH_PLOT_FILE_NAME_SCORE, file_name=plot_file_name)
-                '''
+                #learner.monitor_core_statistics()
+                #learner.plot_core_statistics(PATH_PLOT_FILE_NAME_SCORE, file_name=plot_file_name)
+                
                 learner.train(instance)
 
             result['Score'] = list(scores)
