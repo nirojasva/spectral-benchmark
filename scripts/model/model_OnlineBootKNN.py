@@ -320,7 +320,8 @@ class OnlineBootKNN(AnomalyDetector):
         # 2. DIMENSIONS FOR SINGLE COLUMN
         # Width: 3.5 inches (Standard Column). 
         # Height: 3.2 inches (Slightly taller to fit staggered labels)
-        fig, ax1 = plt.subplots(figsize=(3.5, 3.2)) 
+        #fig, ax1 = plt.subplots(figsize=(3.5, 3.2)) 
+        fig, ax1 = plt.subplots(figsize=(3.5, 2)) 
 
         # 3. GRAYSCALE COMPATIBILITY
         ax1.bar(headers, differences, 
@@ -532,7 +533,7 @@ if __name__ == "__main__":
             scores = []
             list_auc = []
             row = 0
-            learner = OnlineBootKNN(schema=schema, window_size=WINDOW_SIZE, chunk_size=CHUNCK_SIZE,  ensemble_size=ENSEMBLE_SIZE, dmetric=DMETRIC, transf=TRANF, alpha=ALPHA, algorithm=ALGO, no_bootstrapp=NO_BOOTSTRAPP, no_z_score=NO_ZSCORE)
+            learner = OnlineBootKNN(schema=schema, window_size=WINDOW_SIZE, chunk_size=CHUNCK_SIZE,  ensemble_size=ENSEMBLE_SIZE, dmetric=DMETRIC, transf=TRANF, alpha=ALPHA, algorithm=ALGO, no_bootstrapp=NO_BOOTSTRAPP, no_z_score=NO_ZSCORE, random_seed=iter)
 #           learner = OnlineBootKNN(schema=schema)
             while stream.has_more_instances():
         
