@@ -290,21 +290,21 @@ class OnlineBootKNN(AnomalyDetector):
 
     def explain(self, headers, region_study_list, path: str, file_name: str):
         """
-        Explain method to visualize anomalies in time series data.
-        Optimized for publication (Grayscale compatible, 10pt fonts).
+        Explain method to visualize anomalies.
+        Optimized for SINGLE COLUMN (3.5 inches).
         """
         
+        # 1. SETUP FONTS
         plt.rcParams.update({
             'font.size': 10,
             'axes.labelsize': 10,
             'xtick.labelsize': 8,
             'ytick.labelsize': 8,
-            'legend.fontsize': 8,
-            'figure.titlesize': 12
+            'legend.fontsize': 7,    # Smaller legend for single column
+            'figure.titlesize': 10,
+            'lines.linewidth': 1.0,
+            'font.family': 'serif'
         })
-
-        print("Is Anomaly?:", self.last_value_is_anomaly)
-        print("Anomalies:", self.n_anomalies)
 
         headers = headers.astype(float)
         region_study_list = np.array(region_study_list).astype(str)
@@ -315,35 +315,50 @@ class OnlineBootKNN(AnomalyDetector):
         if self.normal_reference is None or self.abnormal_reference is None:
             raise ValueError("Error: References are None.")
 
-        # Compute differences
         differences = featurewise_distance(self.abnormal_reference, self.normal_reference, metric=self.dmetric)
 
-        # Create figure
-        fig, ax1 = plt.subplots(figsize=(10, 5)) 
+        # 2. DIMENSIONS FOR SINGLE COLUMN
+        # Width: 3.5 inches (Standard Column). 
+        # Height: 3.2 inches (Slightly taller to fit staggered labels)
+        fig, ax1 = plt.subplots(figsize=(3.5, 3.2)) 
 
-        ax1.bar(headers, differences, label=f"Difference (Z: {round(self.z, 2)})", 
-                color='orange', alpha=0.6, width=(headers[1]-headers[0]))
+        # 3. GRAYSCALE COMPATIBILITY
+        ax1.bar(headers, differences, 
+                label=f"Diff (Z: {round(self.z, 2)})",  # Shortened label
+                color='#666666', edgecolor='black', hatch='///', width=(headers[1]-headers[0]), linewidth=0.5)
 
         ax1.set_xlabel('Wavelengths (nm)')
-        ax1.set_ylabel('Intensity Difference')
-        
-        
+        ax1.set_ylabel('Intensity Diff.')
+
         y_min, y_max = ax1.get_ylim()
         
-        for i, rs in enumerate(region_study_list):     
-            rs_s = float(rs.split(":")[0])
-            rs_f = float(rs.split(":")[1])
-            comp = str(rs.split(":")[2])
+        # 4. PLOT MARKERS & SMART STAGGERING
+        for i, rs in enumerate(region_study_list):      
+            try:
+                parts = rs.split(":")
+                rs_s = float(parts[0])
+                rs_f = float(parts[1])
+                comp = str(parts[2])
+            except IndexError:
+                continue
             
-            ax1.axvline(x=rs_s, color='black', linestyle=':', linewidth=1, alpha=0.6)
-            ax1.axvline(x=rs_f, color='black', linestyle=':', linewidth=1, alpha=0.6)
+            # Vertical lines
+            ax1.axvline(x=rs_s, color='black', linestyle='--', linewidth=0.8)
+            ax1.axvline(x=rs_f, color='black', linestyle='--', linewidth=0.8)
 
-            text_pos_y = y_max * (0.9 - (i * 0.05)) 
-            ax1.text(rs_s, text_pos_y, f' {comp}', fontsize=8, verticalalignment='top')
+            # STAGGER LOGIC:
+            # We oscillate the height: 95%, 80%, 65%, then repeat.
+            # This prevents horizontal overlapping.
+            level = i % 3 
+            text_pos_y = y_max * (0.95 - (level * 0.15)) 
+            
+            # Use 7pt font (minimum readable) for dense labels
+            ax1.text(rs_s, text_pos_y, f' {comp}', fontsize=7, verticalalignment='top', fontweight='bold', color='black')
 
-        ax1.legend(loc='upper right', frameon=True)
+        # Compact Legend
+        ax1.legend(loc='upper right', frameon=True, fancybox=False, edgecolor='black', framealpha=1.0)
 
-        plt.title(f"Anomaly Explanation (Total Anomalies: {self.n_anomalies})")
+        plt.title(f"Anomaly Explanation (N: {self.n_anomalies})") # Shortened Title
         
         plt.tight_layout()
         
@@ -351,7 +366,8 @@ class OnlineBootKNN(AnomalyDetector):
             plt.savefig(f"{path}/{file_name}.pdf", format='pdf', bbox_inches='tight')
         
         plt.show()
-
+            
+                    
     def monitor_core_statistics(self):
         # Print monitored stats
         print("Mean:", self.mean)
@@ -363,7 +379,7 @@ class OnlineBootKNN(AnomalyDetector):
         print("Number of Anomalies:", self.n_anomalies)
         print(f"Z Threshold for One tail at {self.alpha}:", self.z_critical_one_tail)
         print("Z Score:", self.z)
-    
+
     def plot_core_statistics(self, path: str, file_name: str):
         # Append monitored stats
         self.means_to_monitor.append(self.mean)
@@ -445,15 +461,7 @@ if __name__ == "__main__":
     from capymoa.evaluation import AnomalyDetectionEvaluator
     from data_utils import calculate_roc_pr_auc
     import time
-    params = {
-    'font.size': 10,           
-    'axes.labelsize': 10,      
-    'xtick.labelsize': 8,      
-    'ytick.labelsize': 8,      
-    'legend.fontsize': 8,      
-    'figure.titlesize': 12
-    }
-    plt.rcParams.update(params)
+
     
     # Get the path to the current script
     current_dir = Path(__file__).resolve().parent
@@ -494,8 +502,8 @@ if __name__ == "__main__":
     DATASETS_LIST = ["A6_"]
     #DATASETS_LIST = ["DA1_", "SA1_", "TA1_","DA2_", "SA2_", "TA2_","DA3_", "SA3_", "TA3_"]
     MIN_Z_SCORE = 4
-    REGION_STUDY = ["386.45:393.38:N2", "773.38:780.40:O2","652.47:659.53:H","304.46:311.54:OH","748.38:752.19:Ar"] 
-
+    #REGION_STUDY = ["386.45:393.38:N2", "773.38:780.40:O2","652.47:659.53:H","304.46:311.54:OH","748.38:752.19:Ar"] 
+    REGION_STUDY = ["386.45:393.38:N2", "773.38:780.40:O2","652.47:659.53:H","304.46:311.54:OH"] 
     
     for file_name in spectra_files:
         
