@@ -296,12 +296,12 @@ class OnlineBootKNN(AnomalyDetector):
         
         # 1. SETUP FONTS
         plt.rcParams.update({
-            'font.size': 10,
-            'axes.labelsize': 10,
+            'font.size': 8,
+            'axes.labelsize': 8,
             'xtick.labelsize': 8,
             'ytick.labelsize': 8,
-            'legend.fontsize': 7,    # Smaller legend for single column
-            'figure.titlesize': 10,
+            'legend.fontsize': 7,    
+            'figure.titlesize': 8,
             'lines.linewidth': 1.0,
             'font.family': 'serif'
         })
@@ -554,7 +554,7 @@ if __name__ == "__main__":
                 list_auc.append(auc)
                 print(f'AUC ({row}):', auc)
                 
-                plot_file_name = str(file_name.name.split("_")[0])+"_transf_"+TRANF
+                plot_file_name = str(file_name.name.split("_")[0])+"_transf_"+TRANF+"_anomaly_explanation"
                 
                 if learner.z > MIN_Z_SCORE:
                     learner.explain(cols, REGION_STUDY, PATH_PLOT_FILE_NAME_INTERPRETATION, plot_file_name)
