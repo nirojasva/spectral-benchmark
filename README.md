@@ -1,4 +1,4 @@
-# Benckmark for Anomaly Detection on Spectral Datastreams
+# Benckmark for Anomaly Detection on Spectral Data Streams
 
 This is the implementation of the comparative benchmark of multivariate online anomaly detection methods including Online Bootstrapping K-Nearest Neighbor (OBKNN) published in [[paper](https://hal.science/hal-05115467)] with appendix [[app.](https://drive.uca.fr/f/acd6b29b7e2346efbb82/)].
 
