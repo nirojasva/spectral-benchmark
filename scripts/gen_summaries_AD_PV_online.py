@@ -21,10 +21,11 @@ SUMMARY_PATH = current_dir / 'datasets' / 'summaries'
 
 # Define name of the file to generate
 #SUMMARY_FILE = SUMMARY_PATH / 'summary_results_online_detectors_pv_ds.xlsx'
-#SUMMARY_FILE = SUMMARY_PATH / 'summary_results_ablation_study_pv_ds.xlsx'
-SUMMARY_FILE = SUMMARY_PATH / 'summary_results_test.xlsx'
+SUMMARY_FILE = SUMMARY_PATH / 'summary_results_ablation_study_pv_ds.xlsx'
+#SUMMARY_FILE = SUMMARY_PATH / 'summary_results_test.xlsx'
 
 # Dataset folders to process (Comparative of SOTA Methods)
+"""
 dataset_paths = [
     DATA_PATH_N / 'processed_server22_A1',
     DATA_PATH_N / 'processed_server22_A2',
@@ -35,20 +36,21 @@ dataset_paths = [
     DATA_PATH_N / 'processed_server18_A7',
     DATA_PATH_N / 'processed_server18_A8',
     DATA_PATH_N / 'processed_server18_A9',
+    current_dir / 'datasets' / 'processed'
 ]
-
+"""
 # Dataset folders to process (Comparative of Ablation Methods - SWKNN and OBKNN)
 dataset_paths = [
-    DATA_PATH_N / 'processed_server22_A1',
-    DATA_PATH_N / 'processed_server22_A2',
-    DATA_PATH_N / 'processed_server22_A3',
-    DATA_PATH_N / 'processed_server21_A4',
-    DATA_PATH_N / 'processed_server21_A5',
-    DATA_PATH_N / 'processed_L40S02_A6',
-    DATA_PATH_N / 'processed_server18_A7',
-    DATA_PATH_N / 'processed_server18_A8',
-    DATA_PATH_N / 'processed_server18_A9',
-    current_dir / 'datasets' / 'processed_ablation_lite',
+    DATA_PATH_N / 'processed_server22_A1_lite',
+    DATA_PATH_N / 'processed_server22_A2_lite',
+    DATA_PATH_N / 'processed_server22_A3_lite',
+    DATA_PATH_N / 'processed_server21_A4_lite',
+    DATA_PATH_N / 'processed_server21_A5_lite',
+    DATA_PATH_N / 'processed_L40S02_A6_lite',
+    DATA_PATH_N / 'processed_server18_A7_lite',
+    DATA_PATH_N / 'processed_server18_A8_lite',
+    DATA_PATH_N / 'processed_server18_A9_lite',
+    current_dir / 'datasets' / 'processed_ablation_lite'
 ]
 
 # Columns needed from Excel files
@@ -62,9 +64,20 @@ summary_data = []
 processed_data = []
 
 # Function to process a single group (for parallel processing)
-def process_group(group, file_name, iteration, mwp):
+def process_group(group, file_name, iteration, method, mwp):
     try:
-        roc_auc, pr_auc, max_f1 = calculate_roc_pr_auc(group, "ground_truth", "cleaned_score")
+        direction = "direct"
+        """
+        # Inverting HStree score depending on version of Capymoa (invert if >=v0.9.0)
+        if method == "HStree":
+            direction = "inverse"
+        else:
+            direction = "direct"
+        """
+        
+
+        roc_auc, pr_auc, max_f1 = calculate_roc_pr_auc(group, "ground_truth", "cleaned_score", score_direction=direction)
+
     except Exception as e:
         logging.error(f"Metric calculation failed for {file_name} | Iter {iteration} | {mwp}: {e}")
         return None
@@ -99,18 +112,18 @@ def process_file(file_path, path_name):
     window = file_path.name.split("_")[-1][:-5]
     df['method_window_and_param'] = df['method'] + "_" + window + "_" + df['param'].astype(str)
 
-    grouped = df.groupby(["iteration", "method_window_and_param"])
+    grouped = df.groupby(["iteration", "method", "method_window_and_param"])
 
     local_summary_data = []
     
     # Use ThreadPoolExecutor to parallelize group processing
     with ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
         futures = []
-        for (iteration, mwp), group in grouped:
+        for (iteration, method, mwp), group in grouped:
             if len(group) != 4200:
-                logging.warning(f"{file_path.name} | Iter {iteration} | {mwp}: Expected 4200 rows, got {len(group)}")
+                logging.warning(f"{file_path.name} | Iter {iteration} | Merhod {method} | {mwp}: Expected 4200 rows, got {len(group)}")
                 continue
-            futures.append(executor.submit(process_group, group, file_path.name, iteration, mwp))
+            futures.append(executor.submit(process_group, group, file_path.name, iteration, method, mwp))
 
         for future in as_completed(futures):
             result = future.result()

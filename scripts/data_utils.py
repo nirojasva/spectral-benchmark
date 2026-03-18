@@ -1,5 +1,6 @@
 import pandas as pd
 pd.set_option('mode.use_inf_as_na', True)
+
 import numpy as np
 from sklearn.metrics import roc_auc_score, precision_recall_curve, auc
 from capymoa.instance import Instance
@@ -11,14 +12,24 @@ from scipy.stats import zscore
 #INF = np.finfo(np.float64).max
 INF = 1.0e+200
 
-def calculate_roc_pr_auc(df, gt_column, score_column):
+def calculate_roc_pr_auc(df, gt_column, score_column, score_direction='direct'):
     """Helper function to calculate ROC AUC, PR AUC, and max F1 Score (threshold-independent)"""
     
+    scores = df[score_column].values
+    labels = df[gt_column].values
+
+    if score_direction == 'inverse':
+        scores = -scores
+    elif score_direction == 'direct':
+        scores = scores
+    else:
+        raise ValueError("score direction must be 'direct' or 'inverse' ")
+
     # Calculate ROC AUC
-    roc_auc = roc_auc_score(df[gt_column], df[score_column])
+    roc_auc = roc_auc_score(labels, scores)
     
     # Calculate Precision-Recall AUC
-    precision, recall, thresholds = precision_recall_curve(df[gt_column], df[score_column])
+    precision, recall, thresholds = precision_recall_curve(labels, scores)
     pr_auc = auc(recall, precision)
 
     # Calculate F1 scores for all thresholds and take the max

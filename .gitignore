@@ -1,4 +1,5 @@
 env_spectra/
+env_analysis/
 datasets/processed/
 datasets/raw/
 datasets/processed_ablation/

@@ -461,7 +461,13 @@ if __name__ == "__main__":
     from capymoa.stream import NumpyStream
     from capymoa.evaluation import AnomalyDetectionEvaluator
     from data_utils import calculate_roc_pr_auc
+    from capymoa.anomaly import HalfSpaceTrees as HStreeCapy
     import time
+
+    os.environ["OMP_NUM_THREADS"] = "20"
+    os.environ["OPENBLAS_NUM_THREADS"] = "20"
+    os.environ["MKL_NUM_THREADS"] = "20"
+    os.environ["NUMEXPR_NUM_THREADS"] = "20"
 
     
     # Get the path to the current script
@@ -487,8 +493,9 @@ if __name__ == "__main__":
     summary_data = []
 
     NUMBER_RUNS = 1
+    SCORE_DIR = "inverse" #direct or inverse
     WINDOW_SIZE = 120
-    MODEL = "OnlineBootKNN"
+    
     TRANF = "ZNORM"
     CHUNCK_SIZE = 240
     ENSEMBLE_SIZE = 240
@@ -498,9 +505,9 @@ if __name__ == "__main__":
     ALGO = "brute"
     ALPHA = 0.05
     SLEEP_TIME = 0
-    #DATASETS_LIST = ["A1_","A2_","A3_","A4_","A5_","A6_","A7_","A8_","A9_"]
+    DATASETS_LIST = ["A1_","A2_","A3_","A4_","A5_","A6_","A7_","A8_","A9_"]
     
-    DATASETS_LIST = ["A6_"]
+    #DATASETS_LIST = ["A1_","A2_","A3_","A4_","A5_"]
     #DATASETS_LIST = ["DA1_", "SA1_", "TA1_","DA2_", "SA2_", "TA2_","DA3_", "SA3_", "TA3_"]
     MIN_Z_SCORE = 4
     #REGION_STUDY = ["386.45:393.38:N2", "773.38:780.40:O2","652.47:659.53:H","304.46:311.54:OH","748.38:752.19:Ar"] 
@@ -533,8 +540,10 @@ if __name__ == "__main__":
             scores = []
             list_auc = []
             row = 0
-            learner = OnlineBootKNN(schema=schema, window_size=WINDOW_SIZE, chunk_size=CHUNCK_SIZE,  ensemble_size=ENSEMBLE_SIZE, dmetric=DMETRIC, transf=TRANF, alpha=ALPHA, algorithm=ALGO, no_bootstrapp=NO_BOOTSTRAPP, no_z_score=NO_ZSCORE, random_seed=iter)
-#           learner = OnlineBootKNN(schema=schema)
+            #learner = OnlineBootKNN(schema=schema, window_size=WINDOW_SIZE, chunk_size=CHUNCK_SIZE,  ensemble_size=ENSEMBLE_SIZE, dmetric=DMETRIC, transf=TRANF, alpha=ALPHA, algorithm=ALGO, no_bootstrapp=NO_BOOTSTRAPP, no_z_score=NO_ZSCORE, random_seed=iter)
+            #learner = OnlineBootKNN(schema=schema)
+            learner = HStreeCapy(schema=schema, window_size=WINDOW_SIZE, number_of_trees=25, anomaly_threshold=0.5, size_limit=0.1, max_depth=15, random_seed=1)
+            
             while stream.has_more_instances():
         
                 time.sleep(SLEEP_TIME)
@@ -556,9 +565,10 @@ if __name__ == "__main__":
                 print(f'AUC ({row}):', auc)
                 
                 plot_file_name = str(file_name.name.split("_")[0])+"_transf_"+TRANF+"_anomaly_explanation"
-                
+                '''
                 if learner.z > MIN_Z_SCORE:
                     learner.explain(cols, REGION_STUDY, PATH_PLOT_FILE_NAME_INTERPRETATION, plot_file_name)
+                '''
                 #learner.monitor_core_statistics()
                 #learner.plot_core_statistics(PATH_PLOT_FILE_NAME_SCORE, file_name=plot_file_name)
                 
@@ -571,11 +581,11 @@ if __name__ == "__main__":
             score_column = 'Score'
             gt_column = "ANOMALY?"
             
-            roc_auc, pr_auc, max_f1 = calculate_roc_pr_auc(result, gt_column, score_column)
+            roc_auc, pr_auc, max_f1 = calculate_roc_pr_auc(result, gt_column, score_column, score_direction=SCORE_DIR)
             summary_data.append({
                 "iteration": iter,
                 "scenario": file_name.name.split("_")[0],
-                "method": MODEL,
+                "method": learner.__class__.__name__,
                 "AUC_ROC": roc_auc,
                 "AUC_PR": pr_auc,
                 "Max_F1": max_f1,

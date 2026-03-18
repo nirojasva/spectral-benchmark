@@ -1,6 +1,6 @@
 --extra-index-url https://download.pytorch.org/whl/cpu
-
-capymoa==0.9.0
+capymoa==0.8.2
+#capymoa==0.9.0 # only used for scenario A6
 click==8.1.8
 colorama==0.4.6
 combo==0.1.3
