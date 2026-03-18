@@ -20,12 +20,12 @@ DATA_PATH_N = current_dir / 'datasets' / 'processed'
 SUMMARY_PATH = current_dir / 'datasets' / 'summaries'
 
 # Define name of the file to generate
-#SUMMARY_FILE = SUMMARY_PATH / 'summary_results_online_detectors_pv_ds.xlsx'
-SUMMARY_FILE = SUMMARY_PATH / 'summary_results_ablation_study_pv_ds.xlsx'
+SUMMARY_FILE = SUMMARY_PATH / 'summary_results_online_detectors_pv_ds.xlsx'
+#SUMMARY_FILE = SUMMARY_PATH / 'summary_results_ablation_study_pv_ds.xlsx'
 #SUMMARY_FILE = SUMMARY_PATH / 'summary_results_test.xlsx'
 
 # Dataset folders to process (Comparative of SOTA Methods)
-"""
+
 dataset_paths = [
     DATA_PATH_N / 'processed_server22_A1',
     DATA_PATH_N / 'processed_server22_A2',
@@ -52,7 +52,7 @@ dataset_paths = [
     DATA_PATH_N / 'processed_server18_A9_lite',
     current_dir / 'datasets' / 'processed_ablation_lite'
 ]
-
+"""
 # Columns needed from Excel files
 usecols = [
     "iteration", "method", "param", "ground_truth", "cleaned_score",
@@ -67,6 +67,7 @@ processed_data = []
 def process_group(group, file_name, iteration, method, mwp):
     try:
         direction = "direct"
+        
         """
         # Inverting HStree score depending on version of Capymoa (invert if >=v0.9.0)
         if method == "HStree":
