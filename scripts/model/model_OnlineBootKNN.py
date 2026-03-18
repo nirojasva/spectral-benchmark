@@ -460,16 +460,18 @@ if __name__ == "__main__":
 
     from capymoa.stream import NumpyStream
     from capymoa.evaluation import AnomalyDetectionEvaluator
-    from data_utils import calculate_roc_pr_auc
-    from capymoa.anomaly import HalfSpaceTrees as HStreeCapy
+    from data_utils import calculate_roc_pr_auc, clean_score
     import time
+    from capymoa.anomaly import OnlineIsolationForest, HalfSpaceTrees as HStreeCapy
+    from pysad.models import ExactStorm, IForestASD, KitNet, LODA, RobustRandomCutForest, RSHash, xStream
+    """
+    import os, sys
 
     os.environ["OMP_NUM_THREADS"] = "20"
     os.environ["OPENBLAS_NUM_THREADS"] = "20"
     os.environ["MKL_NUM_THREADS"] = "20"
     os.environ["NUMEXPR_NUM_THREADS"] = "20"
-
-    
+    """
     # Get the path to the current script
     current_dir = Path(__file__).resolve().parent
     
@@ -493,9 +495,8 @@ if __name__ == "__main__":
     summary_data = []
 
     NUMBER_RUNS = 1
-    SCORE_DIR = "inverse" #direct or inverse
-    WINDOW_SIZE = 120
-    
+    WINDOW_SIZE = 60
+    MODEL = "Tested Model"
     TRANF = "ZNORM"
     CHUNCK_SIZE = 240
     ENSEMBLE_SIZE = 240
@@ -505,9 +506,10 @@ if __name__ == "__main__":
     ALGO = "brute"
     ALPHA = 0.05
     SLEEP_TIME = 0
+    SCORE_DIR = "direct" #direct or inverse
     DATASETS_LIST = ["A1_","A2_","A3_","A4_","A5_","A6_","A7_","A8_","A9_"]
     
-    #DATASETS_LIST = ["A1_","A2_","A3_","A4_","A5_"]
+    #DATASETS_LIST = ["A6_"]
     #DATASETS_LIST = ["DA1_", "SA1_", "TA1_","DA2_", "SA2_", "TA2_","DA3_", "SA3_", "TA3_"]
     MIN_Z_SCORE = 4
     #REGION_STUDY = ["386.45:393.38:N2", "773.38:780.40:O2","652.47:659.53:H","304.46:311.54:OH","748.38:752.19:Ar"] 
@@ -539,43 +541,62 @@ if __name__ == "__main__":
             stream.restart()
             scores = []
             list_auc = []
+
             row = 0
             #learner = OnlineBootKNN(schema=schema, window_size=WINDOW_SIZE, chunk_size=CHUNCK_SIZE,  ensemble_size=ENSEMBLE_SIZE, dmetric=DMETRIC, transf=TRANF, alpha=ALPHA, algorithm=ALGO, no_bootstrapp=NO_BOOTSTRAPP, no_z_score=NO_ZSCORE, random_seed=iter)
-            #learner = OnlineBootKNN(schema=schema)
-            learner = HStreeCapy(schema=schema, window_size=WINDOW_SIZE, number_of_trees=25, anomaly_threshold=0.5, size_limit=0.1, max_depth=15, random_seed=1)
-            
+            learner = HStreeCapy(schema=schema, window_size=120, number_of_trees=25, anomaly_threshold=0.5, size_limit=0.1, max_depth=15, random_seed=1)
+            #learner = OnlineIsolationForest(schema=schema, window_size=240, random_seed=1, growth_criterion ='adaptive', max_leaf_samples=32, n_jobs= -1, num_trees=32)
+            #learner = IForestASD(window_size=240, initial_window_X= None)
+            #learner = KitNet(hidden_ratio=0.75, learning_rate=0.1, max_size_ae=10, grace_feature_mapping=240, grace_anomaly_detector=240)
+            #learner = ExactStorm(window_size=120, max_radius=0.1)
+            #learner = RobustRandomCutForest(shingle_size=240, num_trees=4, tree_size=256) 
+            #learner = RSHash(sampling_points=120, decay= 0.015, feature_maxes= [10000], feature_mins= [0], num_components= 100, num_hash_fns= 1)
+            #learner = xStream(window_size=60, depth=25, n_chains=100, num_components=100)
+
             while stream.has_more_instances():
         
                 time.sleep(SLEEP_TIME)
 
                 instance = stream.next_instance()
+                
+                
+                print(f'A new instance ({row})...index:', instance.y_label,', label:', instance.y_index, ", time:", result.iloc[row, 0])
+                print('The new instance:', instance.x)
+                
                 row = row + 1 
-                
-                print(f'A new instance ({row})...index:', instance.y_label,', label:',instance.y_index)
-                print('The new instance:',instance.x)
-                
-                score = learner.score_instance(instance)
 
-                scores.append(score)
-                print(f'Score ({row}):', score)                
- 
-                evaluator.update(instance.y_index, score)
-                auc = evaluator.auc()
-                list_auc.append(auc)
-                print(f'AUC ({row}):', auc)
+                if hasattr(learner, "fit_partial"): # Models Implemented in Pysad
+                    start_time = time.time()  # Record the start time                        
+                    learner.fit_partial(instance.x)
+                    end_time = time.time()  # Record the end time
+                    # Calculate the elapsed time for training
+                    training_time = end_time - start_time
+                    
+                    start_time = time.time()  # Record the start time
+                    score = learner.score_partial(instance.x)
+                    end_time = time.time()  # Record the end time
+                    # Calculate the elapsed time for scoring
+                    scoring_time = end_time - start_time
                 
-                plot_file_name = str(file_name.name.split("_")[0])+"_transf_"+TRANF+"_anomaly_explanation"
-                '''
-                if learner.z > MIN_Z_SCORE:
-                    learner.explain(cols, REGION_STUDY, PATH_PLOT_FILE_NAME_INTERPRETATION, plot_file_name)
-                '''
-                #learner.monitor_core_statistics()
-                #learner.plot_core_statistics(PATH_PLOT_FILE_NAME_SCORE, file_name=plot_file_name)
-                
-                learner.train(instance)
+                elif hasattr(learner, "train"): # Models Implemented in Capymoa
+
+                    start_time = time.time()  # Record the start time
+                    score = learner.score_instance(instance)
+                    end_time = time.time()  # Record the end time
+                    # Calculate the elapsed time for scoring
+                    scoring_time = end_time - start_time
+                    
+                    start_time = time.time()  # Record the start time
+                    learner.train(instance)
+                    end_time = time.time()  # Record the end time
+                    # Calculate the elapsed time for training
+                    training_time = end_time - start_time
+
+                cleaned_score, error_score = clean_score(score)
+                scores.append(cleaned_score)
 
             result['Score'] = list(scores)
-            result['AUC'] = list(list_auc)
+            #result['AUC'] = list(list_auc)
 
             # Calculate metrics and store results
             score_column = 'Score'
@@ -585,7 +606,7 @@ if __name__ == "__main__":
             summary_data.append({
                 "iteration": iter,
                 "scenario": file_name.name.split("_")[0],
-                "method": learner.__class__.__name__,
+                "method": MODEL,
                 "AUC_ROC": roc_auc,
                 "AUC_PR": pr_auc,
                 "Max_F1": max_f1,
