@@ -69,7 +69,7 @@ def process_group(group, file_name, iteration, method, mwp):
         direction = "direct"
         
         """
-        # Inverting HStree score depending on version of Capymoa (invert if >=v0.9.0)
+        # Inverting HStree score depending on version of Capymoa (invert if v0.9.0-v0.11.0)
         if method == "HStree":
             direction = "inverse"
         else:

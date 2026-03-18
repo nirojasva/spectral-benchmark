@@ -544,7 +544,7 @@ if __name__ == "__main__":
 
             row = 0
             #learner = OnlineBootKNN(schema=schema, window_size=WINDOW_SIZE, chunk_size=CHUNCK_SIZE,  ensemble_size=ENSEMBLE_SIZE, dmetric=DMETRIC, transf=TRANF, alpha=ALPHA, algorithm=ALGO, no_bootstrapp=NO_BOOTSTRAPP, no_z_score=NO_ZSCORE, random_seed=iter)
-            learner = HStreeCapy(schema=schema, window_size=120, number_of_trees=25, anomaly_threshold=0.5, size_limit=0.1, max_depth=15, random_seed=1)
+            learner = HStreeCapy(schema=schema, window_size=60, number_of_trees=25, anomaly_threshold=0.5, size_limit=0.1, max_depth=15, random_seed=1)
             #learner = OnlineIsolationForest(schema=schema, window_size=240, random_seed=1, growth_criterion ='adaptive', max_leaf_samples=32, n_jobs= -1, num_trees=32)
             #learner = IForestASD(window_size=240, initial_window_X= None)
             #learner = KitNet(hidden_ratio=0.75, learning_rate=0.1, max_size_ae=10, grace_feature_mapping=240, grace_anomaly_detector=240)
