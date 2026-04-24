@@ -5,8 +5,8 @@ This repository contains the official code for the comparative benchmark of mult
 You can read the full research and the supplementary materials here:
 * **Published Article:** [Read the official publication](https://doi.org/10.1609/aaai.v40i18.38611)
 * **Extended Version:** [Read the preprint on HAL](https://hal.science/hal-05115467)
-* **Appendix:** [Download supplementary data](https://drive.uca.fr/f/acd6b29b7e2346efbb82/)
-
+* **Raw Data:** [Download supplementary data](https://drive.uca.fr/d/70aec2976f0e45438eb7/)
+* **Appendix:** [Download supplementary information](https://drive.uca.fr/f/acd6b29b7e2346efbb82/)
 
 ## Installation
 
@@ -60,10 +60,7 @@ pip install -r requirements.txt
 
 ## Datasets Files
 
-[Link to Raw Datasets](https://drive.uca.fr/d/70aec2976f0e45438eb7/)
-
 [Project folder for Raw Datasets](datasets/raw)
-
 
 ### Datasets description 
 - The last column in each dataset file refers to the anomaly label (1: anomaly, 0:normal).
