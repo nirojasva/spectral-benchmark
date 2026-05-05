@@ -464,6 +464,9 @@ if __name__ == "__main__":
     import time
     from capymoa.anomaly import OnlineIsolationForest, HalfSpaceTrees as HStreeCapy
     from pysad.models import ExactStorm, IForestASD, KitNet, LODA, RobustRandomCutForest, RSHash, xStream
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.max_rows', None)
+
     """
     import os, sys
 
@@ -494,7 +497,7 @@ if __name__ == "__main__":
     # Results dataframe
     summary_data = []
 
-    NUMBER_RUNS = 3
+    NUMBER_RUNS = 5
     WINDOW_SIZE = 60
     MODEL = "Tested Model"
     TRANF = "ZNORM"
@@ -509,7 +512,7 @@ if __name__ == "__main__":
     SCORE_DIR = "direct" #direct or inverse
     #DATASETS_LIST = ["A1_","A2_","A3_","A4_","A5_","A6_","A7_","A8_","A9_"]
     
-    #DATASETS_LIST = ["A1_"]
+    #DATASETS_LIST = ["DA3_"]
     DATASETS_LIST = ["DA1_", "SA1_", "TA1_","DA2_", "SA2_", "TA2_","DA3_", "SA3_", "TA3_"]
     MIN_Z_SCORE = 4
     #REGION_STUDY = ["386.45:393.38:N2", "773.38:780.40:O2","652.47:659.53:H","304.46:311.54:OH","748.38:752.19:Ar"] 
@@ -552,7 +555,7 @@ if __name__ == "__main__":
             #learner = RobustRandomCutForest(shingle_size=240, num_trees=4, tree_size=256) 
             #learner = RSHash(sampling_points=120, decay= 0.015, feature_maxes= [10000], feature_mins= [0], num_components= 100, num_hash_fns= 1)
             #learner = xStream(window_size=60, depth=25, n_chains=100, num_components=100)
-
+            
             while stream.has_more_instances():
         
                 time.sleep(SLEEP_TIME)
@@ -631,7 +634,7 @@ if __name__ == "__main__":
 
     # Display the sorted pivot table
     print(pivot)
-    
+
     pivot = summary_data.pivot_table(values=[ "AUC_PR"],
                                         columns=['scenario'], index=['method'], aggfunc='std')
 
@@ -639,7 +642,7 @@ if __name__ == "__main__":
     pivot['Avg'] = pivot.mean(axis=1)  # Row-wise mean, can use sum(axis=1) for total sum
 
     # Rounding the pivot table values to 3 decimal places for better readability
-    pivot = pivot.round(3)
+    
 
     # Sorting the pivot table by the "Avg" column in descending order
     pivot = pivot.sort_values(by='Avg', ascending=False)
