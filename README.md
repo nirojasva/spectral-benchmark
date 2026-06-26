@@ -76,14 +76,14 @@ source env_analysis/bin/activate
 #### Windows (PowerShell)
 
 ```powershell
-python -m venv env_analysis
+py -3.11 -m venv env_analysis
 env_analysis\Scripts\Activate.ps1
 ```
 
 #### Windows (CMD)
 
 ```cmd
-python -m venv env_analysis
+py -3.11 -m venv env_analysis
 env_analysis\Scripts\activate.bat
 ```
 
