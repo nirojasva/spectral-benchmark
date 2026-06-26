@@ -2,103 +2,165 @@
 
 This repository contains the official code for the comparative benchmark of multivariate online anomaly detection methods, including the Online Bootstrapping K-Nearest Neighbor (OBKNN) algorithm.
 
-You can read the full research and the supplementary materials here:
-* **Published Article:** [Read the official publication](https://doi.org/10.1609/aaai.v40i18.38611)
-* **Extended Version:** [Read the preprint on HAL](https://hal.science/hal-05115467)
-* **Raw Data:** [Download datasets](https://drive.uca.fr/d/70aec2976f0e45438eb7/)
-* **Appendix:** [Download supplementary information](https://drive.uca.fr/f/acd6b29b7e2346efbb82/)
+You can read the full research and supplementary materials here:
+
+- Published Article: https://doi.org/10.1609/aaai.v40i18.38611  
+- Extended Version: https://hal.science/hal-05115467  
+- Raw Data: https://drive.uca.fr/d/70aec2976f0e45438eb7/  
+- Appendix: https://drive.uca.fr/f/acd6b29b7e2346efbb82/  
+
+---
 
 ## Installation
 
-- Step 1: System-Wide Prerequisites
-Before installing the Python packages, please ensure you have the following system-level tools installed:
+### Step 1: System-Wide Prerequisites
 
-    - Python 3.11.2
+Ensure the following tools are installed:
 
-    - C++ Build Tools: Required to compile dependencies in dSalmon.
+- Python 3.11.2 or compatible
+- C++ Build Tools (required for dSalmon)
+  - Ubuntu:
+    ```bash
+    sudo apt-get install build-essential
+    ```
+  - Windows:
+    Install Microsoft C++ Build Tools
+- Java (JDK) required for capymoa
 
-        - On Ubuntu: sudo apt-get install build-essential
+---
 
-        - On Windows: Install "C++ build tools".
+### Step 2: Evaluation Environment (env_spectra)
 
-    - Java (JDK): Required to run the capymoa package.
+This environment is used to run experiments.
 
-- Step 2: Evaluation Environment (env_spectra)
-
-
-This environment is for running the different experiments.
+#### Linux / macOS
 
 ```bash
-# Create the environment
 python3 -m venv env_spectra
-
-# Activate the environment
 source env_spectra/bin/activate
 ```
 
-You can install all the necessary packages using pip:
+#### Windows (PowerShell)
+
+```powershell
+py -3.11 -m venv env_spectra
+env_spectra\Scripts\Activate.ps1
+```
+
+#### Windows (CMD)
+
+```cmd
+py -3.11 -m venv env_spectra
+env_spectra\Scripts\activate.bat
+```
+
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-- Step 3: Analysis Environment (env_analysis) This separate environment is only for analysing result-generation scripts.
+---
+
+### Step 3: Analysis Environment (env_analysis)
+
+This environment is used for result analysis.
+
+#### Linux / macOS
 
 ```bash
-# Create the environment
 python3 -m venv env_analysis
-
-# Activate the new environment
 source env_analysis/bin/activate
+```
 
-# Install vus autorank capymoa and openpyxl
-pip install vus==0.0.6 autorank==1.3.0 capymoa==0.9.0 openpyxl==3.1.5 
+#### Windows (PowerShell)
 
+```powershell
+python -m venv env_analysis
+env_analysis\Scripts\Activate.ps1
+```
+
+#### Windows (CMD)
+
+```cmd
+python -m venv env_analysis
+env_analysis\Scripts\activate.bat
+```
+
+Install required packages:
+
+```bash
+pip install vus==0.0.6 autorank==1.3.0 capymoa==0.9.0 openpyxl==3.1.5
 pip install -r requirements.txt
 ```
 
+---
 
-## Datasets Files
+### Notes for Windows Users
 
-[Project folder for Raw Datasets](datasets/raw)
+- Use `python` instead of `python3`
+- If PowerShell blocks activation:
 
-### Datasets description 
-- The last column in each dataset file refers to the anomaly label (1: anomaly, 0:normal).
-- The first colum in each dataset file correspond to the timestamp of the recorded spectral instances.
-- The rest of columns in each dataset are associated with different wavelenths of the spectral instances.
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
 
-## How to run OnlineBootKNN
+- If cloning fails due to incompatible filenames:
+
+```bash
+git clone --no-checkout https://github.com/nirojasva/spectral-benchmark.git
+cd spectral-benchmark
+git checkout
+```
+
+---
+
+## Dataset Files
+
+datasets/raw
+
+### Dataset Description
+
+- Last column: anomaly label (1 = anomaly, 0 = normal)
+- First column: timestamp
+- Remaining columns: spectral wavelengths
+
+---
+
+## How to Run OnlineBootKNN
 
 ### Parameters
 
-- chunk_size: size of the chunks (default: 240)
-- ensemble_size: size of the ensemble of chunks (default: 240)
-- dmetric: distance metric used to compute differences among instances one of ["cityblock", "minkowski"] (default: "cityblock")
-- transf: type of data tranformation, one of ["None", "ZNORM"] where "None" for raw data and "ZNORM" for z-normalization (default: "ZNORM")
-- alpha: Level of Significance for One-Tailed Z-Tests (default: 0.05)
+- chunk_size: size of chunks (default 240)
+- ensemble_size: number of chunks (default 240)
+- dmetric: distance metric ("cityblock", "minkowski")
+- transf: transformation ("None", "ZNORM")
+- alpha: significance level (default 0.05)
+
+---
 
 ### Script
+
+```bash
+python scripts/model/model_OnlineBootKNN.py
 ```
-cd ~/spectral-benchmark
-source env_spectra/bin/activate
-python3 scripts/model/model_OnlineBootKNN.py
-```
+
+---
 
 ### Example of Detected Anomaly
 
-[Link to Detected Anomaly Visualization (PDF)](notebooks/img_anomalies/A6_transf_ZNORM_anomaly_explanation_V2.pdf)
+notebooks/img_anomalies/A6_transf_ZNORM_anomaly_explanation_V2.pdf
 
+---
 
-## How to Generate Comparative Anomaly Score of SOTA Methods
+## Generate Comparative Anomaly Scores
 
-### Script
-
+```bash
+python scripts/gen_comparative_AD_PV_online.py
 ```
-cd ~/spectral-benchmark
-source env_spectra/bin/activate
-python3 scripts/gen_comparative_AD_PV_online.py
-```
+
+---
 
 ## Summary of Results
 
-[Link to Summary of Results (Excel)](datasets/summaries/summary_results_online_detectors_pv_ds.xlsx)
+datasets/summaries/summary_results_online_detectors_pv_ds.xlsx
