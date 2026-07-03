@@ -94,24 +94,7 @@ pip install vus==0.0.6 autorank==1.3.0 capymoa==0.9.0 openpyxl==3.1.5
 pip install -r requirements.txt
 ```
 
----
 
-### Notes for Windows Users
-
-- Use `python` instead of `python3`
-- If PowerShell blocks activation:
-
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
-- If cloning fails due to incompatible filenames:
-
-```bash
-git clone --no-checkout https://github.com/nirojasva/spectral-benchmark.git
-cd spectral-benchmark
-git checkout
-```
 
 ---
 
