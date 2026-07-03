@@ -100,7 +100,7 @@ pip install -r requirements.txt
 
 ## Dataset Files
 
-datasets/raw
+[datasets/raw](datasets/raw)
 
 ### Dataset Description
 
@@ -146,4 +146,4 @@ python scripts/gen_comparative_AD_PV_online.py
 
 ## Summary of Results
 
-datasets/summaries/summary_results_online_detectors_pv_ds.xlsx
+[datasets/summaries/summary_results_online_detectors_pv_ds.xlsx](datasets/summaries/summary_results_online_detectors_pv_ds.xlsx)
