@@ -132,7 +132,7 @@ python scripts/model/model_OnlineBootKNN.py
 
 ### Example of Detected Anomaly
 
-[Example of Anomaly] notebooks/img_anomalies/A6_transf_ZNORM_anomaly_explanation_V2.pdf
+[Example of Anomaly] (notebooks/img_anomalies/A6_transf_ZNORM_anomaly_explanation_V2.pdf)
 
 ---
 
