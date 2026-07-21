@@ -67,12 +67,12 @@ def transform_instance(instance:Instance, transf):
         t_instance = Instance.from_array(instance.schema, t_instance.reshape( -1))
         return t_instance
     if transf == "FOD":
-        # Calculate the Moving Average
-        t_instance = np.diff(np.diff(instance.x))
+        # Calculate the first-order difference
+        t_instance = np.diff(instance.x)
         t_instance = Instance.from_array(instance.schema, t_instance)
         return t_instance
     if transf == "SOD":
-        # Calculate the first-order difference
+        # Calculate the second-order difference
         t_instance = np.diff(np.diff(instance.x))
         t_instance = Instance.from_array(instance.schema, t_instance)
         return t_instance    

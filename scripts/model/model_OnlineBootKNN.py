@@ -194,7 +194,7 @@ class OnlineBootKNN(AnomalyDetector):
         delta = new_dist - self.mean
         
         self.mean += delta / self.n
-        self.sum_squares += delta ** 2
+        self.sum_squares += delta * (new_dist - self.mean)
         
         if self.n > 1:
             self.std_dev = math.sqrt(self.sum_squares / (self.n - 1))
