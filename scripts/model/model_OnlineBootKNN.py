@@ -460,7 +460,7 @@ if __name__ == "__main__":
 
     from capymoa.stream import NumpyStream
     from capymoa.evaluation import AnomalyDetectionEvaluator
-    from data_utils import calculate_roc_pr_auc, clean_score
+    from data_utils import calculate_roc_pr_auc, clean_score, calculate_performance_metrics
     import time
     from capymoa.anomaly import OnlineIsolationForest, HalfSpaceTrees as HStreeCapy
     from pysad.models import ExactStorm, IForestASD, KitNet, LODA, RobustRandomCutForest, RSHash, xStream
@@ -475,6 +475,7 @@ if __name__ == "__main__":
     os.environ["MKL_NUM_THREADS"] = "20"
     os.environ["NUMEXPR_NUM_THREADS"] = "20"
     """
+    sys.setrecursionlimit(2000)
     # Get the path to the current script
     current_dir = Path(__file__).resolve().parent
     
@@ -498,8 +499,10 @@ if __name__ == "__main__":
     summary_data = []
 
     NUMBER_RUNS = 5
-    WINDOW_SIZE = 60
+    WINDOW_SIZE = 240
     MODEL = "Tested Model"
+
+
     TRANF = "ZNORM"
     CHUNCK_SIZE = 240
     ENSEMBLE_SIZE = 240
@@ -512,7 +515,7 @@ if __name__ == "__main__":
     SCORE_DIR = "direct" #direct or inverse
     #DATASETS_LIST = ["A1_","A2_","A3_","A4_","A5_","A6_","A7_","A8_","A9_"]
     
-    #DATASETS_LIST = ["DA3_"]
+    #DATASETS_LIST = ["A1_"]
     DATASETS_LIST = ["DA1_", "SA1_", "TA1_","DA2_", "SA2_", "TA2_","DA3_", "SA3_", "TA3_"]
     MIN_Z_SCORE = 4
     #REGION_STUDY = ["386.45:393.38:N2", "773.38:780.40:O2","652.47:659.53:H","304.46:311.54:OH","748.38:752.19:Ar"] 
@@ -539,7 +542,7 @@ if __name__ == "__main__":
         schema = stream.get_schema()    
         evaluator = AnomalyDetectionEvaluator(schema)
 
-        for iter in range(NUMBER_RUNS):
+        for i in range(NUMBER_RUNS):
 
             stream.restart()
             scores = []
@@ -547,15 +550,17 @@ if __name__ == "__main__":
 
             row = 0
             #learner = OnlineBootKNN(schema=schema, window_size=WINDOW_SIZE, chunk_size=CHUNCK_SIZE,  ensemble_size=ENSEMBLE_SIZE, dmetric=DMETRIC, transf=TRANF, alpha=ALPHA, algorithm=ALGO, no_bootstrapp=NO_BOOTSTRAPP, no_z_score=NO_ZSCORE, random_seed=iter)
-            #learner = HStreeCapy(schema=schema, window_size=60, number_of_trees=25, anomaly_threshold=0.5, size_limit=0.1, max_depth=15, random_seed=1)
-            #learner = OnlineIsolationForest(schema=schema, window_size=240, random_seed=1, growth_criterion ='adaptive', max_leaf_samples=32, n_jobs= -1, num_trees=32)
-            learner = IForestASD(window_size=240, initial_window_X= None)
-            #learner = KitNet(hidden_ratio=0.75, learning_rate=0.1, max_size_ae=10, grace_feature_mapping=240, grace_anomaly_detector=240)
+            #learner = HStreeCapy(schema=schema, window_size=WINDOW_SIZE, number_of_trees=25, anomaly_threshold=0.5, size_limit=0.1, max_depth=15, random_seed=1)
+            #learner = OnlineIsolationForest(schema=schema, window_size=WINDOW_SIZE, random_seed=1, growth_criterion ='adaptive', max_leaf_samples=32, n_jobs= -1, num_trees=32)
+            learner = IForestASD(window_size=WINDOW_SIZE, initial_window_X= None)
+            #learner = KitNet(hidden_ratio=0.75, learning_rate=0.1, max_size_ae=10, grace_feature_mapping=WINDOW_SIZE, grace_anomaly_detector=WINDOW_SIZE)
             #learner = ExactStorm(window_size=120, max_radius=0.1)
             #learner = RobustRandomCutForest(shingle_size=240, num_trees=4, tree_size=256) 
             #learner = RSHash(sampling_points=120, decay= 0.015, feature_maxes= [10000], feature_mins= [0], num_components= 100, num_hash_fns= 1)
             #learner = xStream(window_size=60, depth=25, n_chains=100, num_components=100)
             
+            np.random.seed(i)
+
             while stream.has_more_instances():
         
                 time.sleep(SLEEP_TIME)
@@ -598,13 +603,14 @@ if __name__ == "__main__":
                 cleaned_score, error_score = clean_score(score)
                 scores.append(cleaned_score)
 
-            result['Score'] = list(scores)
+            result['Score'+str(i)] = list(scores)
             #result['AUC'] = list(list_auc)
 
             # Calculate metrics and store results
             score_column = 'Score'
             gt_column = "ANOMALY?"
-            
+
+            '''
             roc_auc, pr_auc, max_f1 = calculate_roc_pr_auc(result, gt_column, score_column, score_direction=SCORE_DIR)
             summary_data.append({
                 "iteration": iter,
@@ -614,13 +620,72 @@ if __name__ == "__main__":
                 "AUC_PR": pr_auc,
                 "Max_F1": max_f1,
             })
+            '''
+            try:
+                results = calculate_performance_metrics(result, gt_column, score_column+str(i), t_window_size=WINDOW_SIZE, score_direction=SCORE_DIR)
+                roc_auc, pr_auc, max_f1, metrics, roc_auc_wtd, pr_auc_wtd, max_f1_wtd, pct_detection, pct_false_positives, tn, fp, fn, tp, best_threshold = results
+                auc_roc = metrics.get('AUC_ROC', None)
+                auc_pr = metrics.get('AUC_PR', None)
+                precision = metrics.get('Precision', None)
+                f = metrics.get('F', None)
+                precision_at_k = metrics.get('Precision_at_k', None)
+                rprecision = metrics.get('Rprecision', None)
+                rrecall = metrics.get('Rrecall', None)
+                rf = metrics.get('RF', None)
+                r_auc_roc = metrics.get('R_AUC_ROC', None)
+                r_auc_pr = metrics.get('R_AUC_PR', None)
+                vus_roc = metrics.get('VUS_ROC', None)
+                vus_pr = metrics.get('VUS_PR', None)
+                affiliation_precision = metrics.get('Affiliation_Precision', None)
+                affiliation_recall = metrics.get('Affiliation_Recall', None)            
+            
+            
+            except Exception as e:
+                print(f"Error calculating metrics for index {i}: {e}")
+                roc_auc = pr_auc = max_f1 = metrics = roc_auc_wtd = pr_auc_wtd = max_f1_wtd = pct_detection = pct_false_positives = tn = fp = fn = tp = best_threshold = None
+
+            summary_data.append({
+            "iteration": i,
+            "scenario": file_name.name.split("_")[0],
+            #"method_window_and_param": mwp,
+            "method": str(learner.__class__.__name__),
+            "raw_roc_auc": roc_auc,
+            "raw_pr_auc": pr_auc,
+            "raw_max_f1": max_f1,
+            "raw_roc_auc_wtd": roc_auc_wtd,
+            "raw_pr_auc_wtd": pr_auc_wtd,
+            "raw_max_f1_wtd": max_f1_wtd,
+            "raw_pct_detection": pct_detection, # Percentage of Detection same as Recall
+            "raw_pct_false_positives": pct_false_positives, # False Positive Rate
+            "tn": tn, 
+            "fp": fp, 
+            "fn": fn, 
+            "tp": tp, 
+            "best_threshold": best_threshold,
+
+            
+            "auc_roc": auc_roc,
+            "auc_pr": auc_pr,
+            "precision": precision,
+            "f_metric": f,   
+            "precision_at_k": precision_at_k, 
+            "rprecision": rprecision,    
+            "rrecall": rrecall,   
+            "rf": rf,     
+            "r_auc_roc": r_auc_roc,   
+            "r_auc_pr": r_auc_pr, 
+            "vus_roc": vus_roc,  
+            "vus_pr": vus_pr,        
+            "affiliation_precision": affiliation_precision,
+            "affiliation_recall": affiliation_recall,
+            })
             
     print("########################")
-    print("Summary Online Algorithms:")
+    print("Summary Online Algorithms (AUC-PR WTD):")
     # Create DataFrame from collected results
     summary_data = pd.DataFrame(summary_data)
     # Sample pivot table (replace this with your pivot table)
-    pivot = summary_data.pivot_table(values=[ "AUC_PR"],
+    pivot = summary_data.pivot_table(values=[ "raw_pr_auc_wtd"],
                                         columns=['scenario'], index=['method'], aggfunc='mean')
 
     # Adding a "Total" row
@@ -635,7 +700,42 @@ if __name__ == "__main__":
     # Display the sorted pivot table
     print(pivot)
 
-    pivot = summary_data.pivot_table(values=[ "AUC_PR"],
+    pivot = summary_data.pivot_table(values=[ "raw_pr_auc_wtd"],
+                                        columns=['scenario'], index=['method'], aggfunc='std')
+
+    # Adding a "Total" row
+    pivot['Avg'] = pivot.mean(axis=1)  # Row-wise mean, can use sum(axis=1) for total sum
+
+    # Rounding the pivot table values to 3 decimal places for better readability
+    
+
+    # Sorting the pivot table by the "Avg" column in descending order
+    pivot = pivot.sort_values(by='Avg', ascending=False)
+
+    # Display the sorted pivot table
+    print(pivot)
+
+    print("########################")
+    print("Summary Online Algorithms (VUS-PR):")
+    # Create DataFrame from collected results
+    summary_data = pd.DataFrame(summary_data)
+    # Sample pivot table (replace this with your pivot table)
+    pivot = summary_data.pivot_table(values=[ "vus_pr"],
+                                        columns=['scenario'], index=['method'], aggfunc='mean')
+
+    # Adding a "Total" row
+    pivot['Avg'] = pivot.mean(axis=1)  # Row-wise mean, can use sum(axis=1) for total sum
+
+    # Rounding the pivot table values to 3 decimal places for better readability
+    pivot = pivot.round(3)
+
+    # Sorting the pivot table by the "Avg" column in descending order
+    pivot = pivot.sort_values(by='Avg', ascending=False)
+
+    # Display the sorted pivot table
+    print(pivot)
+
+    pivot = summary_data.pivot_table(values=[ "vus_pr"],
                                         columns=['scenario'], index=['method'], aggfunc='std')
 
     # Adding a "Total" row

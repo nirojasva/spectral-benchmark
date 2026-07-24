@@ -36,7 +36,7 @@ This environment is used to run experiments.
 #### Linux / macOS
 
 ```bash
-python3 -m venv env_spectra
+python3.11 -m venv env_spectra
 source env_spectra/bin/activate
 ```
 
@@ -69,7 +69,7 @@ This environment is used for result analysis.
 #### Linux / macOS
 
 ```bash
-python3 -m venv env_analysis
+python3.11 -m venv env_analysis
 source env_analysis/bin/activate
 ```
 
