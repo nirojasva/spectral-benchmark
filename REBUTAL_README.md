@@ -93,4 +93,4 @@ two scenarios: **A6** (stable single-chamber leak) and
 
 | Scenario A6 | Scenario DA3 |
 | :---: | :---: |
-| ![Feature correlation for A6](./A6_feature_correlation.png) | ![Feature correlation for DA3](./DA3_feature_correlation.png) |
+| ![Feature correlation for A6](https://huggingface.co/datasets/a25578073/spectral-benchmark-bv4/blob/main/A6_feature_correlation.png?raw=true) | ![Feature correlation for DA3](https://huggingface.co/datasets/a25578073/spectral-benchmark-bv4/blob/main/DA3_feature_correlation.png?raw=true) |
