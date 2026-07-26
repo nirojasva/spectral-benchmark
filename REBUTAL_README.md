@@ -1,11 +1,18 @@
-## Experimental Setup
+# Experimental Setup
 
 The experiments were conducted on a machine with the following characteristics:
 * **CPU:** 13th Gen Intel(R) Core(TM) i7-13620H (16 Cores)
 * **RAM:** 8 GB
 * **Operating System:** Ubuntu 24.04.2 LTS (WSL2, Kernel 6.6.87.2-microsoft-standard-WSL2)
 
+<br>
+
 ---
+
+<br>
+
+# Results for Anomaly Detection in (Spectral) Data Streams
+
 
 ## AUC-PR Results
 
@@ -23,7 +30,7 @@ Mean AUC-PR performance (± standard deviation) over 5 runs for each scenario an
 *Methods with no variability due to a fixed seed. <br>
 **Methods whose score is invariant when anomalies occur.<br>
 
----
+
 
 ## VUS-PR Results
 
@@ -40,3 +47,37 @@ Mean AUC-PR performance (± standard deviation) over 5 runs for each scenario an
 Mean VUS-PR performance (± standard deviation) over 5 runs for each scenario and overall. <br>
 *Methods with no variability due to a fixed seed. <br>
 **Methods whose score is invariant when anomalies occur.<br>
+
+
+# Results for Anomaly Detection in (Multivariate) Time Series
+
+Results obtained by applying the code available at https://thedatumorg.github.io/TSB-AD/#leaderboard, with the same default configurations for the methods, to the new spectral datasets (DA1, DA2, DA3, SA1, SA2, SA3, TA1, TA2, TA3). Naive_ZScore is a lightweight anomaly detection baseline that does not require training. It uses basic rolling statistics to compute the maximum Z-score across different features (window size = 50).
+
+## AUC-PR Results
+
+| Method | DA1 | DA2 | DA3 | SA1 | SA2 | SA3 | TA1 | TA2 | TA3 | Avg |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| CNN | 0.978<br>± 4.7e-04 | 0.994<br>± 6.8e-05 | 0.985<br>± 3.4e-04 | 0.348<br>± 1.0e-02 | 0.896<br>± 2.4e-03 | 0.973<br>± 1.2e-03 | 0.222<br>± 6.3e-02 | 0.210<br>± 1.4e-02 | 0.102<br>± 4.1e-03 | 0.634<br>± 1.1e-02 |
+| EIF | 0.963<br>± 1.2e-02 | 0.970<br>± 7.1e-03 | 0.469<br>± 1.7e-01 | 0.125<br>± 6.8e-03 | 0.988<br>± 4.1e-03 | 0.807<br>± 1.1e-01 | 0.070<br>± 2.5e-03 | 0.092<br>± 6.5e-03 | 0.093<br>± 4.3e-03 | 0.509<br>± 3.6e-02 |
+| KNN* | 0.041<br>- | 0.057<br>- | 0.076<br>- | 0.008<br>- | 0.050<br>- | 0.080<br>- | 0.106<br>- | 0.083<br>- | 0.007<br>- | 0.057<br>- |
+| LOF* | 0.090<br>- | 0.100<br>- | 0.085<br>- | 0.043<br>- | 0.048<br>- | 0.102<br>- | 0.143<br>- | 0.057<br>- | 0.009<br>- | 0.075<br>- |
+| LSTMAD | 0.978<br>± 2.7e-04 | 0.994<br>± 6.5e-05 | 0.985<br>± 8.7e-05 | 0.388<br>± 2.8e-02 | 0.895<br>± 9.5e-04 | 0.978<br>± 2.1e-03 | 0.102<br>± 9.4e-04 | 0.159<br>± 2.8e-03 | 0.113<br>± 1.1e-02 | 0.621<br>± 5.1e-03 |
+| Naive_ZScore* | 0.008<br>- | 0.044<br>- | 0.100<br>- | 0.012<br>- | 0.065<br>- | 0.116<br>- | 0.060<br>- | 0.054<br>- | 0.011<br>- | 0.052<br>- |
+
+Mean AUC-PR performance (± standard deviation) over 5 runs for each scenario and overall. <br>
+*Methods with no variability since they are deterministic. <br>
+
+
+## VUS-PR Results
+
+| Method | DA1 | DA2 | DA3 | SA1 | SA2 | SA3 | TA1 | TA2 | TA3 | Avg |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| CNN | 0.989<br>± 4.2e-04 | 0.999<br>± 8.0e-06 | 0.987<br>± 3.4e-04 | 0.285<br>± 2.0e-03 | 0.907<br>± 2.0e-03 | 0.975<br>± 1.1e-03 | 0.255<br>± 6.7e-02 | 0.243<br>± 1.4e-02 | 0.112<br>± 3.6e-03 | 0.639<br>± 1.0e-02 |
+| EIF | 0.982<br>± 8.3e-04 | 0.975<br>± 6.5e-03 | 0.474<br>± 1.8e-01 | 0.121<br>± 4.9e-03 | 0.995<br>± 3.3e-03 | 0.808<br>± 1.1e-01 | 0.087<br>± 2.3e-03 | 0.109<br>± 6.8e-03 | 0.120<br>± 3.3e-03 | 0.519<br>± 3.5e-02 |
+| KNN* | 0.033<br>- | 0.054<br>- | 0.080<br>- | 0.016<br>- | 0.053<br>- | 0.084<br>- | 0.123<br>- | 0.091<br>- | 0.013<br>- | 0.061<br>- |
+| LOF* | 0.058<br>- | 0.103<br>- | 0.088<br>- | 0.035<br>- | 0.053<br>- | 0.102<br>- | 0.171<br>- | 0.063<br>- | 0.016<br>- | 0.077<br>- |
+| LSTMAD | 0.990<br>± 4.0e-06 | 0.999<br>± 8.0e-06 | 0.987<br>± 7.0e-05 | 0.344<br>± 4.2e-02 | 0.907<br>± 4.8e-04 | 0.979<br>± 2.0e-03 | 0.125<br>± 1.1e-03 | 0.191<br>± 5.1e-03 | 0.124<br>± 1.3e-02 | 0.627<br>± 7.1e-03 |
+| Naive_ZScore* | 0.012<br>- | 0.047<br>- | 0.105<br>- | 0.021<br>- | 0.071<br>- | 0.121<br>- | 0.068<br>- | 0.061<br>- | 0.019<br>- | 0.058<br>- |
+
+Mean VUS-PR performance (± standard deviation) over 5 runs for each scenario and overall. <br>
+*Methods with no variability since they are deterministic.  <br>
