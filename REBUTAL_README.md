@@ -47,7 +47,7 @@ The experiments were conducted on a machine with the following characteristics:
 
 # Results for Anomaly Detection in (Multivariate) Time Series
 
-Results obtained by applying the code available at [TSB-AD](https://thedatumorg.github.io/TSB-AD/#leaderboard), with the same default configurations for the used methods, to the new spectral datasets (DA1, DA2, DA3, SA1, SA2, SA3, TA1, TA2, TA3). 
+Results obtained by applying the code available at [TSB-AD](https://thedatumorg.github.io/TSB-AD/#leaderboard), with the same default configurations for the used methods, to the new spectral datasets (DA1, DA2, DA3, SA1, SA2, SA3, TA1, TA2, TA3), split into 40% for training and 60% for testing for semi-supervised methods like LSTMAD and CNN.
 
 > **Note:** Naive_ZScore is a lightweight anomaly detection baseline that does not require training. It uses basic rolling statistics to compute the maximum Z-score across different features (window size = 50).
 
@@ -80,3 +80,22 @@ Results obtained by applying the code available at [TSB-AD](https://thedatumorg.
 
 *Mean VUS-PR performance (± standard deviation) over 5 runs for each scenario and overall.*  
 *\*Methods with no variability since they are deterministic.*
+
+
+---
+
+# Correlation Analysis Among Wavelengths
+
+To assess feature redundancy across the spectral dimension, we computed 
+pairwise Pearson correlation matrices between wavelength intervals for 
+two representative scenarios: **A6** (stable single-chamber leak) and 
+**DA3** (drift scenario with two connected chambers). Wavelength ranges were reduced from 2048 to 12 intervals for better visualization by using the maximum intensity of each interval.
+
+## Scenario A6
+
+![Feature correlation for A6](./A6_feature_correlation.png)
+
+## Scenario DA3
+
+![Feature correlation for DA3](./DA3_feature_correlation.png)
+
