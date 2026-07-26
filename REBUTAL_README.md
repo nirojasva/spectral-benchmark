@@ -86,16 +86,11 @@ Results obtained by applying the code available at [TSB-AD](https://thedatumorg.
 
 # Correlation Analysis Among Wavelengths
 
-To assess feature redundancy across the spectral dimension, we computed 
+To assess feature correlation in the spectral data, we computed 
 pairwise Pearson correlation matrices between wavelength intervals for 
-two representative scenarios: **A6** (stable single-chamber leak) and 
+two scenarios: **A6** (stable single-chamber leak) and 
 **DA3** (drift scenario with two connected chambers). Wavelength ranges were reduced from 2048 to 12 intervals for better visualization by using the maximum intensity of each interval.
 
-## Scenario A6
-
-![Feature correlation for A6](./A6_feature_correlation.png)
-
-## Scenario DA3
-
-![Feature correlation for DA3](./DA3_feature_correlation.png)
-
+| Scenario A6 | Scenario DA3 |
+| :---: | :---: |
+| ![Feature correlation for A6](./A6_feature_correlation.png) | ![Feature correlation for DA3](./DA3_feature_correlation.png) |
