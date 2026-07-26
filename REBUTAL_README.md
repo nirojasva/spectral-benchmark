@@ -92,11 +92,11 @@ Results obtained by applying the code available at [TSB-AD](https://thedatumorg.
 
 ---
 
-## Correlation Analysis Among Wavelengths
+# Correlation Analysis Among Wavelengths
 
 To assess feature correlation in spectral data, we computed pairwise Pearson correlation matrices between wavelength intervals for  **DA3** (drift scenario with two connected chambers). Wavelength ranges were reduced from 2048 to 12 intervals for better visualization by using the maximum intensity of each interval.
 
-### Scenario DA3
+## Scenario DA3
 
 **Table 5.** Correlation matrix, Scenario DA3.
 
