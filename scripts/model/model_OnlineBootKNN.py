@@ -498,8 +498,8 @@ if __name__ == "__main__":
     # Results dataframe
     summary_data = []
 
-    NUMBER_RUNS = 3
-    WINDOW_SIZE = 840 #240 for RRCF, OIF, IFASD, KitNET. 120 for OBKNN, ESTORM, RSHASH. 60 for XStream, HStree
+    NUMBER_RUNS = 5
+    WINDOW_SIZE = 240 #240 for RRCF, OIF, IFASD, KitNET. 120 for OBKNN, ESTORM, RSHASH. 60 for XStream, HStree
     MODEL = "Tested Model"
 
 
