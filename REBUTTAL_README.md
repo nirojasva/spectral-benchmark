@@ -94,12 +94,21 @@ Results obtained by applying the code available at [TSB-AD](https://thedatumorg.
 
 # Correlation Analysis Among Wavelengths
 
-To assess feature correlation in spectral data, we computed pairwise Pearson correlation matrices between wavelength intervals for **DA3** (drift scenario with two connected chambers). Wavelength ranges were reduced from 2048 to 12 intervals to simplify the analysis by using the maximum intensity of each interval.
+To assess feature correlation in spectral data, we computed pairwise Pearson correlation matrices between wavelength intervals but also individual spectral wavelengths for **DA3** (drift scenario with two connected chambers). Therefore, rhe data was analyzed using the complete spectrum (2048 wavelengths) as well as reduced resolutions of 1024, 512, 256, and 12 intervals. To analyse intervals, we used the maximum intensity.
 
 ## Scenario DA3
 
-**Table 5.** Correlation matrix, Scenario DA3.
+**Table 5.** Correlation at Different Resolutions, Scenario DA3.
+| n_intervals | Total | Not correlated (< 0.5) | Correlated (>= 0.5) | % of Correlated (>= 0.5) |
+|---|---|---|---|---|
+| None | 2048 | 2048 | 0 | 0.0 |
+| 1024 | 1024 | 925 | 99 | 0.0966796875 |
+| 512 | 512 | 352 | 160 | 0.3125 |
+| 256 | 256 | 119 | 137 | 0.53515625 |
+| 12 | 12 | 1 | 11 | 0.9166666666666666 |
 
+
+**Table 6.** Correlation matrix (Resolution 12 intervals), Scenario DA3.
 | Interval | 189.81-254.07 | 254.45-317.81 | 318.18-380.59 | 380.95-442.32 | 442.67-502.93 | 503.28-562.36 | 562.7-620.52 | 620.86-677.35 | 677.68-732.45 | 732.77-786.09 | 786.4-838.19 | 838.49-888.68 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | **189.81-254.07** | 1.00 | 0.02 | 0.02 | 0.01 | 0.00 | 0.02 | 0.00 | -0.01 | 0.01 | 0.00 | 0.00 | 0.01 |
