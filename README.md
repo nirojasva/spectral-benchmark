@@ -90,7 +90,7 @@ env_analysis\Scripts\activate.bat
 Install required packages:
 
 ```bash
-pip install vus==0.0.6 autorank==1.3.0 capymoa==0.9.0 openpyxl==3.1.5
+pip install vus==0.0.6 autorank==1.3.0 capymoa==0.8.2 openpyxl==3.1.5
 pip install -r requirements.txt
 ```
 
