@@ -498,8 +498,8 @@ if __name__ == "__main__":
     # Results dataframe
     summary_data = []
 
-    NUMBER_RUNS = 3
-    WINDOW_SIZE = 84 #240 for RRCF, OIF, IFASD, KitNET. 120 for OBKNN, ESTORM, RSHASH. 60 for XStream, HStree
+    NUMBER_RUNS = 1
+    WINDOW_SIZE = 240 #240 for RRCF, OIF, IFASD, KitNET. 120 for OBKNN, ESTORM, RSHASH. 60 for XStream, HStree
     MODEL = "Tested Model"
 
 
@@ -550,8 +550,8 @@ if __name__ == "__main__":
 
             row = 0
             #learner = OnlineBootKNN(schema=schema, window_size=WINDOW_SIZE, chunk_size=CHUNCK_SIZE,  ensemble_size=ENSEMBLE_SIZE, dmetric=DMETRIC, transf=TRANF, alpha=ALPHA, algorithm=ALGO, no_bootstrapp=NO_BOOTSTRAPP, no_z_score=NO_ZSCORE, random_seed=iter)
-            learner = HStreeCapy(schema=schema, window_size=WINDOW_SIZE, number_of_trees=25, anomaly_threshold=0.5, size_limit=0.1, max_depth=10, random_seed=i)
-            #learner = OnlineIsolationForest(schema=schema, window_size=WINDOW_SIZE, random_seed=1, growth_criterion ='adaptive', max_leaf_samples=32, n_jobs= -1, num_trees=32)
+            #learner = HStreeCapy(schema=schema, window_size=WINDOW_SIZE, number_of_trees=25, anomaly_threshold=0.5, size_limit=0.1, max_depth=15, random_seed=1)
+            learner = OnlineIsolationForest(schema=schema, window_size=WINDOW_SIZE, random_seed=1, growth_criterion ='adaptive', max_leaf_samples=32, n_jobs= -1, num_trees=32)
             #learner = IForestASD(window_size=WINDOW_SIZE, initial_window_X= None)
             #learner = KitNet(hidden_ratio=0.75, learning_rate=0.1, max_size_ae=10, grace_feature_mapping=WINDOW_SIZE, grace_anomaly_detector=WINDOW_SIZE)
             #learner = ExactStorm(window_size=WINDOW_SIZE, max_radius=0.1)
