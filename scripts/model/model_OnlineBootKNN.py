@@ -481,8 +481,8 @@ if __name__ == "__main__":
     
     # Go two level up
     current_dir = current_dir.parent.parent
-    DATA_PATH = current_dir / 'datasets' / 'raw' / 'ScenariosV3_lite'
-    #DATA_PATH = current_dir / 'datasets' / 'raw' / 'ScenariosV4_lite'
+    #DATA_PATH = current_dir / 'datasets' / 'raw' / 'ScenariosV3_lite'
+    DATA_PATH = current_dir / 'datasets' / 'raw' / 'ScenariosV4_lite'
     #DATA_PATH = current_dir / 'datasets' / 'raw' / 'ScenariosV3'
     #DATA_PATH = current_dir / 'datasets' / 'raw'
     PATH_PLOT_FILE_NAME_INTERPRETATION = current_dir / 'notebooks' / 'img_anomalies'
@@ -498,7 +498,7 @@ if __name__ == "__main__":
     # Results dataframe
     summary_data = []
 
-    NUMBER_RUNS = 5
+    NUMBER_RUNS = 1
     WINDOW_SIZE = 240 #240 for RRCF, OIF, IFASD, KitNET. 120 for OBKNN, ESTORM, RSHASH. 60 for XStream, HStree
     MODEL = "Tested Model"
 
@@ -515,7 +515,7 @@ if __name__ == "__main__":
     SCORE_DIR = "direct" #direct or inverse
     #DATASETS_LIST = ["A1_","A2_","A3_","A4_","A5_","A6_","A7_","A8_","A9_"]
     
-    DATASETS_LIST = ["A1_"]
+    DATASETS_LIST = ["DA1_"]
     #DATASETS_LIST = ["DA1_", "SA1_", "TA1_","DA2_", "SA2_", "TA2_","DA3_", "SA3_", "TA3_"]
     MIN_Z_SCORE = 4
     #REGION_STUDY = ["386.45:393.38:N2", "773.38:780.40:O2","652.47:659.53:H","304.46:311.54:OH","748.38:752.19:Ar"] 
@@ -551,8 +551,8 @@ if __name__ == "__main__":
             row = 0
             #learner = OnlineBootKNN(schema=schema, window_size=WINDOW_SIZE, chunk_size=CHUNCK_SIZE,  ensemble_size=ENSEMBLE_SIZE, dmetric=DMETRIC, transf=TRANF, alpha=ALPHA, algorithm=ALGO, no_bootstrapp=NO_BOOTSTRAPP, no_z_score=NO_ZSCORE, random_seed=iter)
             #learner = HStreeCapy(schema=schema, window_size=WINDOW_SIZE, number_of_trees=25, anomaly_threshold=0.5, size_limit=0.1, max_depth=15, random_seed=1)
-            #learner = OnlineIsolationForest(schema=schema, window_size=WINDOW_SIZE, random_seed=1, growth_criterion ='adaptive', max_leaf_samples=32, n_jobs= -1, num_trees=32)
-            learner = IForestASD(window_size=WINDOW_SIZE, initial_window_X= None)
+            learner = OnlineIsolationForest(schema=schema, window_size=WINDOW_SIZE, random_seed=1, growth_criterion ='adaptive', max_leaf_samples=32, n_jobs= -1, num_trees=32)
+            #learner = IForestASD(window_size=WINDOW_SIZE, initial_window_X= None)
             #learner = KitNet(hidden_ratio=0.75, learning_rate=0.1, max_size_ae=10, grace_feature_mapping=WINDOW_SIZE, grace_anomaly_detector=WINDOW_SIZE)
             #learner = ExactStorm(window_size=WINDOW_SIZE, max_radius=0.1)
             #learner = RobustRandomCutForest(shingle_size=WINDOW_SIZE, num_trees=4, tree_size=256) 
