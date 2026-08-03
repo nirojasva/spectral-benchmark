@@ -1,9 +1,14 @@
 # Experimental Setup
 
-The experiments were conducted on a machine with the following characteristics:
-* **CPU:** 13th Gen Intel(R) Core(TM) i7-13620H (16 Cores)
+The experiments were conducted on a machine with the following characteristics for all methods except MMPAD:
+* **CPU:** 13th Gen Intel(R) Core(TM) i7-13620H (10 Cores, 16 Threads)
 * **RAM:** 8 GB
 * **Operating System:** Ubuntu 24.04.2 LTS (WSL2, Kernel 6.6.87.2-microsoft-standard-WSL2)
+
+The characteristics of the machine for MMPAD tecnique were:
+ * **CPU:** Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz (12 Cores, 24 Threads)
+* **RAM:** 62 GB
+* **Operating System:** Debian GNU/Linux 12 (bookworm) 
 
 ---
 
@@ -66,6 +71,7 @@ Results obtained by applying the code available at [TSB-AD](https://thedatumorg.
 | KNN* | 0.041<br>- | 0.057<br>- | 0.076<br>- | 0.008<br>- | 0.050<br>- | 0.080<br>- | 0.106<br>- | 0.083<br>- | 0.007<br>- | 0.057<br>- |
 | LOF* | 0.090<br>- | 0.100<br>- | 0.085<br>- | 0.043<br>- | 0.048<br>- | 0.102<br>- | 0.143<br>- | 0.057<br>- | 0.009<br>- | 0.075<br>- |
 | LSTMAD | 0.978<br>± 2.7e-04 | 0.994<br>± 6.5e-05 | 0.985<br>± 8.7e-05 | 0.388<br>± 2.8e-02 | 0.895<br>± 9.5e-04 | 0.978<br>± 2.1e-03 | 0.102<br>± 9.4e-04 | 0.159<br>± 2.8e-03 | 0.113<br>± 1.1e-02 | 0.621<br>± 5.1e-03 |
+| MMPAD* | 0.591<br>- | 0.373<br>- | 0.786<br>- | 0.013<br>- | 0.163<br>- | 0.860<br>- | 0.044<br>- | 0.135<br>- | 0.023<br>- | 0.332<br>- |
 | Naive_ZScore* | 0.008<br>- | 0.044<br>- | 0.100<br>- | 0.012<br>- | 0.065<br>- | 0.116<br>- | 0.060<br>- | 0.054<br>- | 0.011<br>- | 0.052<br>- |
 
 *Mean AUC-PR performance (± standard deviation) over 5 runs for each scenario and overall.*  
@@ -84,6 +90,7 @@ Results obtained by applying the code available at [TSB-AD](https://thedatumorg.
 | KNN* | 0.033<br>- | 0.054<br>- | 0.080<br>- | 0.016<br>- | 0.053<br>- | 0.084<br>- | 0.123<br>- | 0.091<br>- | 0.013<br>- | 0.061<br>- |
 | LOF* | 0.058<br>- | 0.103<br>- | 0.088<br>- | 0.035<br>- | 0.053<br>- | 0.102<br>- | 0.171<br>- | 0.063<br>- | 0.016<br>- | 0.077<br>- |
 | LSTMAD | 0.990<br>± 4.0e-06 | 0.999<br>± 8.0e-06 | 0.987<br>± 7.0e-05 | 0.344<br>± 4.2e-02 | 0.907<br>± 4.8e-04 | 0.979<br>± 2.0e-03 | 0.125<br>± 1.1e-03 | 0.191<br>± 5.1e-03 | 0.124<br>± 1.3e-02 | 0.627<br>± 7.1e-03 |
+| MMPAD* | 0.899<br>- | 0.469<br>- | 0.811<br>- | 0.017<br>- | 0.165<br>- | 0.864<br>- | 0.049<br>- | 0.164<br>- | 0.031<br>- | 0.385<br>- |
 | Naive_ZScore* | 0.012<br>- | 0.047<br>- | 0.105<br>- | 0.021<br>- | 0.071<br>- | 0.121<br>- | 0.068<br>- | 0.061<br>- | 0.019<br>- | 0.058<br>- |
 
 *Mean VUS-PR performance (± standard deviation) over 5 runs for each scenario and overall.*  
