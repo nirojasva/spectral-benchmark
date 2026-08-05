@@ -1,7 +1,7 @@
 # Experimental Setup
 
 The experiments were conducted on a machine with the following characteristics for all methods except MMPAD and StreamVAE:
-* **CPU:** 13th Gen Intel(R) Core(TM) i7-13620H (10 Cores, 16 Threads)
+* **CPU:** 13th Gen Intel(R) Core(TM) i7-13620H @ 2.40GHz (10 Cores, 16 Threads)
 * **RAM:** 8 GB
 * **Operating System:** Ubuntu 24.04.2 LTS (WSL2, Kernel 6.6.87.2-microsoft-standard-WSL2)
 
