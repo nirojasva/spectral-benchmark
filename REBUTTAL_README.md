@@ -1,11 +1,11 @@
 # Experimental Setup
 
-The experiments were conducted on a machine with the following characteristics for all methods except MMPAD:
+The experiments were conducted on a machine with the following characteristics for all methods except MMPAD and StreamVAE:
 * **CPU:** 13th Gen Intel(R) Core(TM) i7-13620H (10 Cores, 16 Threads)
 * **RAM:** 8 GB
 * **Operating System:** Ubuntu 24.04.2 LTS (WSL2, Kernel 6.6.87.2-microsoft-standard-WSL2)
 
-The characteristics of the machine for MMPAD tecnique were:
+The characteristics of the machine for MMPAD and StreamVAE tecnique were:
  * **CPU:** Intel(R) Xeon(R) Gold 5118 CPU @ 2.30GHz (12 Cores, 24 Threads)
 * **RAM:** 62 GB
 * **Operating System:** Debian GNU/Linux 12 (bookworm) 
