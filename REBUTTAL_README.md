@@ -73,6 +73,7 @@ Results obtained by applying the code available at [TSB-AD](https://thedatumorg.
 | LSTMAD | 0.978<br>± 2.7e-04 | 0.994<br>± 6.5e-05 | 0.985<br>± 8.7e-05 | 0.388<br>± 2.8e-02 | 0.895<br>± 9.5e-04 | 0.978<br>± 2.1e-03 | 0.102<br>± 9.4e-04 | 0.159<br>± 2.8e-03 | 0.113<br>± 1.1e-02 | 0.621<br>± 5.1e-03 |
 | MMPAD* | 0.591<br>- | 0.373<br>- | 0.786<br>- | 0.013<br>- | 0.163<br>- | 0.860<br>- | 0.044<br>- | 0.135<br>- | 0.023<br>- | 0.332<br>- |
 | Naive_ZScore* | 0.008<br>- | 0.044<br>- | 0.100<br>- | 0.012<br>- | 0.065<br>- | 0.116<br>- | 0.060<br>- | 0.054<br>- | 0.011<br>- | 0.052<br>- |
+| StreamVAE | 0.925<br>± 3.0e-03 | 0.349<br>±4.1e-05 | 0.851<br>±1.8e-05 | 0.939<br>±0.0e-00 | 0.349<br>±0.0e-00 | 0.420<br>±4.1e-07 | 0.192<br>±2.6e-02 | 0.356<br>±1.3e-01 | 0.071<br>±4.9e-03 | 0.495<br>±4.9e-03 |
 
 *Mean AUC-PR performance (± standard deviation) over 5 runs for each scenario and overall.*  
 *\*Methods with no variability since they are deterministic.*
@@ -92,6 +93,8 @@ Results obtained by applying the code available at [TSB-AD](https://thedatumorg.
 | LSTMAD | 0.990<br>± 4.0e-06 | 0.999<br>± 8.0e-06 | 0.987<br>± 7.0e-05 | 0.344<br>± 4.2e-02 | 0.907<br>± 4.8e-04 | 0.979<br>± 2.0e-03 | 0.125<br>± 1.1e-03 | 0.191<br>± 5.1e-03 | 0.124<br>± 1.3e-02 | 0.627<br>± 7.1e-03 |
 | MMPAD* | 0.899<br>- | 0.469<br>- | 0.811<br>- | 0.017<br>- | 0.165<br>- | 0.864<br>- | 0.049<br>- | 0.164<br>- | 0.031<br>- | 0.385<br>- |
 | Naive_ZScore* | 0.012<br>- | 0.047<br>- | 0.105<br>- | 0.021<br>- | 0.071<br>- | 0.121<br>- | 0.068<br>- | 0.061<br>- | 0.019<br>- | 0.058<br>- |
+| StreamVAE | 0.984<br>± 3.5e-04 | 0.382<br>±2.2e-05 | 0.919<br>±3.6e-05 | 0.987<br>±0.0e-00 | 0.382<br>±0.0e-00 | 0.487<br>±0.0e-00 | 0.210<br>±3.4e-2 | 0.386<br>±1.2e-1 | 0.093<br>±1.1e-2 | 0.537<br>-2.0e-2 |
+
 
 *Mean VUS-PR performance (± standard deviation) over 5 runs for each scenario and overall.*  
 *\*Methods with no variability since they are deterministic.*
