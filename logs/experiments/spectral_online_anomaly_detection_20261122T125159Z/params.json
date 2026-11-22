@@ -1,0 +1,20 @@
+{
+  "n_runs": 5,
+  "window_sizes": [
+    60,
+    120,
+    240
+  ],
+  "methods": [
+    "ExactStorm",
+    "HStree",
+    "IForestASD",
+    "KitNet",
+    "OnlineBootKNN",
+    "RSHash",
+    "RobustRandomCutForest",
+    "oIF",
+    "xStream"
+  ],
+  "scenarios": "ALL"
+}

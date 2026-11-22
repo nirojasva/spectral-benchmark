@@ -1,7 +1,9 @@
 env_spectra/
 env_analysis/
 datasets/processed/
-datasets/raw/
+datasets/raw/*
+!datasets/raw/A1_20241023_145637_ALPS_0.csv
+!datasets/raw/DA1_20250609_152704_ALPS_0.csv
 datasets/processed_ablation/
 datasets/processed_ablation_lite/
 datasets/raw/ScenariosV3/
